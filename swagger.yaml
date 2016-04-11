@@ -6,12 +6,11 @@ info:
 
 paths:
    /slash_courses:
-    
       get:
          tags: 
          - slash_course
          description: "Gets Slash_Courses objects and their details"
-         # *** what exactly is produces? ***
+         # **** what exactly is produces? ****
          produces:
            - application/json
          parameters:
@@ -30,7 +29,6 @@ paths:
              description: "Search all slash courses by department"
              required: false
              type: string
-             
          responses:
            "200":
              description: "Successful response"
@@ -44,7 +42,7 @@ paths:
              description: "Internal Server Error"
              schema:
                $ref: "#/definitions/Errors"
-      
+
    /slash_courses/crn/{crn}:
       get:
          tags:
@@ -102,11 +100,9 @@ paths:
              schema:
                $ref: "#/definitions/Errors"
 
-
-
 definitions:
 
-   # what do links do?
+   # **** what do links do? ****
    Links:
       properties:
          self:
@@ -181,27 +177,3 @@ definitions:
       type: array
       items:
          $ref: "#/definitions/Error"
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
