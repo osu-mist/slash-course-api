@@ -5,175 +5,314 @@ info:
   title: Slash Course API
 
 paths:
-   /slash_courses:
-      get:
-         tags: 
-         - slash_course
-         description: "Gets Slash_Courses objects and their details"
-         # **** what exactly is produces? ****
-         produces:
-           - application/json
-         parameters:
-           - name: all
-             in: query
-             description: "Search all slash courses"
-             required: false
-             type: string
-           - name: term
-             in: query
-             description: "Search all slash courses by term"
-             required: false
-             type: string
-           - name: department
-             in: query
-             description: "Search all slash courses by department"
-             required: false
-             type: string
-         responses:
-           "200":
-             description: "Successful response"
-             schema:
-               $ref: "#/definitions/ResultObjects"
-           "404":
-             description: "Not Found"
-             schema:
-               $ref: "#/definitions/Error"
-           "500":
-             description: "Internal Server Error"
-             schema:
-               $ref: "#/definitions/Errors"
+  /slash_courses:
+    
+    # Get slash courses information 
+    get:
+      tags: 
+        - slash_course
+      description: "Gets slash courses information"
+      produces:
+        - application/json
+      parameters:
+        - name: all
+          in: query
+          description: "Search all slash courses"
+          required: false
+          type: string
+        - name: term
+          in: query
+          description: "Search all slash courses by term"
+          required: false
+          type: string
+        - name: department
+          in: query
+          description: "Search all slash courses by department"
+          required: false
+          type: string
+      responses:
+        "200":
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/CourseObjects"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Errors"
 
-   /slash_courses/crn/{crn}:
-      get:
-         tags:
-           - slash_course
-         description: "Search slash course by CRN"
-         operationId: getByCRN
-         produces:
-            - application/json
-         parameters:
-            - name: crn
-              in: path
-              description: "Unique CRN"
-              required: true
-              type: integer
-              format: int32
-         responses:
-           "200":
-             description: "Successful response"
-             schema:
-               $ref: "#/definitions/ResultObjects"
-           "404":
-             description: "Not Found"
-             schema:
-               $ref: "#/definitions/Error"
-           "500":
-             description: "Internal Server Error"
-             schema:
-               $ref: "#/definitions/Errors"
+    # Add new slash course
+    post:
+      tags:
+        - slash_course
+      description: "Add a new Slash_Courses object"
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: "Slash course information which will be added"
+          required: true
+          schema:
+            $ref: "#/definitions/CourseObject"
+      responses:
+        "200":
+          description: "Successful response"
+        "201":
+          description: "Resource created"
+        "204":
+          description: "No content"
+        "401":
+          description: "Unauthorized"
+        "405":
+          description: "Invalid input"
+        "500":
+          description: "Internal server error"
+
+
+  /slash_courses/crn/{crn}:
+    
+    # Get slash course information 
+    get:
+      tags:
+        - slash_course
+      description: "Search slash course by CRN"
+      operationId: getByCRN
+      produces:
+        - application/json
+      parameters:
+        - name: crn
+          in: path
+          description: "Unique CRN for searching purpose"
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/CourseObject"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Errors"
+
+    # Update slash course information 
+    put:
+      tags:
+        - slash_course
+      description: "Update slash course details by CRN"
+      produces:
+        - application/json
+      parameters:
+        - name: crn
+          in: path
+          description: "Unique CRN for searching purpose"
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          description: "Slash course information which will be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/CourseObject"
+      responses:
+        "200":
+          description: "Successful response"
+        "201":
+          description: "Resource created"
+        "204":
+          description: "No content"
+        "401":
+          description: "Unauthorized"
+        "405":
+          description: "Invalid input"
+        "500":
+          description: "Internal server error"
+
+    # Delete slash course information 
+    delete:
+      tags:
+        - slash_course
+      description: "Delete a Slash_Courses object course by CRN"
+      produces:
+        - application/json
+      parameters:
+        - name: crn
+          in: path
+          description: "Unique CRN for searching purpose"
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: "Successful response"
+        "201":
+          description: "Resource created"
+        "204":
+          description: "No content"
+        "401":
+          description: "Unauthorized"
+        "405":
+          description: "Invalid input"
+        "500":
+          description: "Internal server error"
                
-   /slash_courses/course_num/{course_num}:
-      get:
-         tags:
-           - slash_course
-         description: "Search slash course by course number"
-         operationId: getByCourseNum
-         produces:
-            - application/json
-         parameters:
-            - name: course_num
-              in: path
-              description: "Unique Course Number"
-              required: true
-              type: string
-         responses:
-           "200":
-             description: "Successful response"
-             schema:
-               $ref: "#/definitions/ResultObjects"
-           "404":
-             description: "Not Found"
-             schema:
-               $ref: "#/definitions/Error"
-           "500":
-             description: "Internal Server Error"
-             schema:
-               $ref: "#/definitions/Errors"
+  /slash_courses/course_num/{course_num}:
+    
+    # Get slash course information 
+    get:
+      tags:
+        - slash_course
+      description: "Search slash course by course number"
+      operationId: getByCourseNum
+      produces:
+        - application/json
+      parameters:
+        - name: course_num
+          in: path
+          description: "Unique course number for searching purpose"
+          required: true
+          type: string
+      responses:
+        "200":
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/CourseObject"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Errors"
+
+    # Update slash course information 
+    put:
+      tags:
+        - slash_course
+      description: "Update slash course details by course number"
+      produces:
+        - application/json
+      parameters:
+        - name: course_num
+          in: path
+          description: "Unique course number for searching purpose"
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          description: "Slash course information which will be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/CourseObject"
+      responses:
+        "200":
+          description: "Successful response"
+        "201":
+          description: "Resource created"
+        "204":
+          description: "No content"
+        "401":
+          description: "Unauthorized"
+        "405":
+          description: "Invalid input"
+        "500":
+          description: "Internal server error"
+
+    # Delete slash course information 
+    delete:
+      tags:
+        - slash_course
+      description: "Delete a Slash_Courses object course by CRN"
+      produces:
+        - application/json
+      parameters:
+        - name: course_num
+          in: path
+          description: "Unique course number for searching purpose"
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: "Successful response"
+        "201":
+          description: "Resource created"
+        "204":
+          description: "No content"
+        "401":
+          description: "Unauthorized"
+        "405":
+          description: "Invalid input"
+        "500":
+          description: "Internal server error"
 
 definitions:
-
-   # **** what do links do? ****
-   Links:
-      properties:
-         self:
-            type: string
-         first:
-            type: string
-         last:
-            type: string
-         prev:
-            type: string
-         next:
-            type: string
             
-   ResourceObject:
-      properties:
-         crn:
-            type: integer
-            format: int32
-         course_num:
-            type: string
-         course_name:
-            type: string
-         slash:
-            type: integer
-            format: int32
-         department:
-            type: string
-         term:
-            type: string
-         instructor:
-            type: string
-         day:
-            type: string
-         time:
-            type: string
-         location:
-            type: string
-         type:
-            type: string
-         
-   ResultObject:
-      properties:
-         links: 
-            $ref: "#/definitions/Links"
-         data:
-            $ref: "#/definitions/ResourceObject"
+  # Course object schema
+  CourseObject:
+    properties:
+      crn:
+        type: integer
+        format: int32
+      course_num:
+        type: string
+      course_name:
+        type: string
+      slash:
+        type: integer
+        format: int32
+      department:
+        type: string
+      term:
+        type: string
+      instructor:
+        type: string
+      day:
+        type: string
+      time:
+        type: string
+      location:
+        type: string
+      type:
+        type: string
             
-   ResultObjects:
-      properties:
-         links: 
-            $ref: "#/definitions/Links"
-         data:
-            $ref: "#/definitions/ResultObject"
+  # A list of course objects
+  CourseObjects:
+    properties:
+      data:
+        $ref: "#/definitions/CourseObject"
             
-   Error:
-      type: object
-      properties:
-         status:
-            type: integer
-            format: int32
-         developerMessage:
-            type: string
-         userMessafe:
-            type: string
-         code:
-            type: integer
-         details:
-            type: string
+  # Error object schema
+  Error:
+    type: object
+    properties:
+      status:
+        type: integer
+        format: int32
+      developerMessage:
+        type: string
+      userMessafe:
+        type: string
+      code:
+        type: integer
+      details:
+        type: string
    
-   Errors:
-      title: ArrayOfErrors
-      type: array
-      items:
-         $ref: "#/definitions/Error"
+  # A list of error objects
+  Errors:
+    title: ArrayOfErrors
+    type: array
+    items:
+      $ref: "#/definitions/Error"
