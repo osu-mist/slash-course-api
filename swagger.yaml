@@ -71,10 +71,6 @@ paths:
           description: "Invalid input"
           schema:
             $ref: "#/definitions/Error"
-        "409":
-          description: "Invalid input"
-          schema:
-            $ref: "#/definitions/Error"
         "500":
           description: "Internal server errors"
           schema:
@@ -174,8 +170,6 @@ paths:
       responses:
         "200":
           description: "Successful response"
-          schema:
-            $ref: "#/definitions/CourseObject"
         "204":
           description: "No content"
           schema:
@@ -225,9 +219,10 @@ definitions:
             
   # A list of course objects
   CourseObjects:
-    properties:
-      data:
-        $ref: "#/definitions/CourseObject"
+    title: ArrayOfCourseObject
+    type: array
+    items:
+      $ref: "#/definitions/CourseObject"
             
   # Error object schema
   Error:
