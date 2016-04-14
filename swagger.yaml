@@ -202,8 +202,6 @@ definitions:
       slash:
         type: integer
         format: int32
-      department:
-        type: string
       term:
         type: string
       instructor:
