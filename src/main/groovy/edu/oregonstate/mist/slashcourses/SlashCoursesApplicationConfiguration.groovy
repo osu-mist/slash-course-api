@@ -1,6 +1,6 @@
 package edu.oregonstate.mist.slashcourses
 
-import io.dropwizard.Configuration
+import edu.oregonstate.mist.api.Configuration
 import io.dropwizard.db.DataSourceFactory
 
 /**
