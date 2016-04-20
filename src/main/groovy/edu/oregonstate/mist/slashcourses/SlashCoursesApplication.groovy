@@ -1,28 +1,24 @@
 package edu.oregonstate.mist.slashcourses
 
-import edu.oregonstate.mist.api.Configuration
-import edu.oregonstate.mist.api.Resource
-import edu.oregonstate.mist.api.InfoResource
-import edu.oregonstate.mist.api.AuthenticatedUser
-import edu.oregonstate.mist.api.BasicAuthenticator
+import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
 import edu.oregonstate.mist.slashcourses.resources.SlashCourseResource
 import io.dropwizard.Application
+import io.dropwizard.jdbi.DBIFactory
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import io.dropwizard.auth.AuthFactory
-import io.dropwizard.auth.basic.BasicAuthFactory
+import org.skife.jdbi.v2.DBI
 
 /**
  * Main application class.
  */
-class SlashCoursesApplication extends Application<Configuration> {
+class SlashCoursesApplication extends Application<SlashCoursesApplicationConfiguration> {
     /**
      * Initializes application bootstrap.
      *
      * @param bootstrap
      */
     @Override
-    public void initialize(Bootstrap<Configuration> bootstrap) {}
+    public void initialize(Bootstrap<SlashCoursesApplicationConfiguration> bootstrap) {}
 
     /**
      * Parses command-line arguments and runs the application.
@@ -31,16 +27,13 @@ class SlashCoursesApplication extends Application<Configuration> {
      * @param environment
      */
     @Override
-    public void run(Configuration configuration, Environment environment) {
-        Resource.loadProperties('resource.properties')
-        environment.jersey().register(new SlashCourseResource())
-        environment.jersey().register(new InfoResource())
-        environment.jersey().register(
-                AuthFactory.binder(
-                        new BasicAuthFactory<AuthenticatedUser>(
-                                new BasicAuthenticator(configuration.getCredentialsList()),
-                                'SkeletonApplication',
-                                AuthenticatedUser.class)))
+    public void run(SlashCoursesApplicationConfiguration configuration, Environment environment) {
+
+        final DBIFactory factory = new DBIFactory()
+        final DBI jdbi = factory.build(environment, configuration.getDatabase(), "jdbi")
+        final SlashCourseDAO slashCourseDAO = jdbi.onDemand(SlashCourseDAO.class)
+
+        environment.jersey().register(new SlashCourseResource(slashCourseDAO))
     }
 
     /**
