@@ -27,6 +27,11 @@ import javax.ws.rs.core.MediaType
 class SlashCourseResource extends Resource {
 
     private final SlashCourseDAO slashCourseDAO
+
+    public SlashCourseResource(SlashCourseDAO slashCourseDAO){
+        this.slashCourseDAO = slashCourseDAO
+    }
+
     /**
      * Responds to GET requests by returning a message.
      *
@@ -42,7 +47,7 @@ class SlashCourseResource extends Resource {
     @GET
     @Path('{crn}')
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getByCRN(@PathParam('{crn}') IntParam crn) {
+    public Response getByCRN(@PathParam('crn') IntParam crn) {
 
         Response returnResponse
         SlashCourse slashCourse = slashCourseDAO.getByCRN(crn.get())
@@ -53,7 +58,7 @@ class SlashCourseResource extends Resource {
             ErrorPOJO returnError = new ErrorPOJO(errorCode: errorCode, errorMessage: errorMessage)
             returnResponse        = Response.status(Response.Status.NOT_FOUND).entity(returnError).build()
         } else {
-            returnResponse        = Response.ok(SlashCourse).build()
+            returnResponse = Response.ok(SlashCourse).build()
         }
             returnResponse
     }
