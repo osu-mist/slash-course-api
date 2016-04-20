@@ -1,7 +1,7 @@
-package edu.oregonstate.mist.webapiskeleton.resources
+package edu.oregonstate.mist.slashcourses.resources
 
 import edu.oregonstate.mist.api.Resource
-import edu.oregonstate.mist.webapiskeleton.core.Sample
+import edu.oregonstate.mist.slashcourses.core.Sample
 import edu.oregonstate.mist.api.AuthenticatedUser
 import io.dropwizard.auth.Auth
 import javax.ws.rs.GET
@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType
 /**
  * Sample resource class.
  */
-@Path('/sample/')
+@Path('/slash_courses/')
 class SampleResource extends Resource {
     /**
      * Responds to GET requests by returning a message.

@@ -1,11 +1,11 @@
-package edu.oregonstate.mist.webapiskeleton
+package edu.oregonstate.mist.slashcourses
 
 import edu.oregonstate.mist.api.Configuration
 import edu.oregonstate.mist.api.Resource
 import edu.oregonstate.mist.api.InfoResource
 import edu.oregonstate.mist.api.AuthenticatedUser
 import edu.oregonstate.mist.api.BasicAuthenticator
-import edu.oregonstate.mist.webapiskeleton.resources.SampleResource
+import edu.oregonstate.mist.slashcourses.resources.SampleResource
 import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
