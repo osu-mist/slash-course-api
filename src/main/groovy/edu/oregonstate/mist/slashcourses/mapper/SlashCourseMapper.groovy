@@ -9,7 +9,7 @@ import java.sql.SQLException
 /**
  * Slash Course Mapper
  */
-public class SlashCourseMapper implements ResultSetMapper<SlashCourse>{
+public class SlashCourseMapper implements ResultSetMapper<SlashCourse> {
     @Override
     SlashCourse map(int index, ResultSet r, StatementContext ctx) throws SQLException {
         new SlashCourse(
