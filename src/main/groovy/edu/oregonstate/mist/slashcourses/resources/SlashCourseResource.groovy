@@ -24,7 +24,7 @@ import javax.ws.rs.core.MediaType
  */
 @Path('/slash_courses/')
 @Produces(MediaType.APPLICATION_JSON)
-class SampleResource extends Resource {
+class SlashCourseResource extends Resource {
 
     private final SlashCourseDAO slashCourseDAO
     /**
