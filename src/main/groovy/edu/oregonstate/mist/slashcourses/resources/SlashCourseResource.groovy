@@ -69,11 +69,11 @@ class SlashCourseResource extends Resource {
      * @param message
      * @return message
      */
-    @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response postMessage(String message, @Auth AuthenticatedUser authenticatedUser) {
-        ResponseBuilder responseBuilder = ok(message)
-        responseBuilder.build()
-    }
+//    @POST
+//    @Consumes(MediaType.TEXT_PLAIN)
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response postMessage(String message, @Auth AuthenticatedUser authenticatedUser) {
+//        ResponseBuilder responseBuilder = ok(message)
+//        responseBuilder.build()
+//    }
 }
