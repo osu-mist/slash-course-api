@@ -15,8 +15,5 @@ configuration.yaml
 # Mac OS X
 .DS_Store
 
-# Build Properties
-build.properties
-
 # Oracle Driver
 bin/ojdbc6_g.jar
