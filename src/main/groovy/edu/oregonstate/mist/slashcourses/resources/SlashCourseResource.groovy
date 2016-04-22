@@ -1,10 +1,8 @@
 package edu.oregonstate.mist.slashcourses.resources
 
 import edu.oregonstate.mist.api.Resource
-import edu.oregonstate.mist.slashcourses.core.ErrorPOJO
 import edu.oregonstate.mist.slashcourses.core.SlashCourse
 import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
-import io.dropwizard.jersey.params.IntParam
 
 import javax.ws.rs.GET
 import javax.ws.rs.POST
