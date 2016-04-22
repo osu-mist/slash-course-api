@@ -18,7 +18,8 @@ public interface SlashCourseDAO {
      *  @return Slash Course object
      */
     @SqlQuery("""
-              SELECT * FROM COURSE
+              SELECT *
+              FROM COURSE
               WHERE CRN = :crn
               """ )
     SlashCourse getByCRN(@Bind("crn") Integer crn)
