@@ -9,7 +9,7 @@ class SlashCourse {
     String course_name
     Integer slash
     String term
-    String instructor
+    Integer instructor_id
     String day
     String time
     String location

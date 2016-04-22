@@ -35,20 +35,16 @@ class SlashCourseResource extends Resource {
      */
 
     @GET
-    @Path('{crn}')
+    @Path('{crn: \\d+}')
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getByCRN(@PathParam('crn') IntParam crn) {
-
+    public Response getByCRN(@PathParam('crn') Integer crn) {
         Response returnResponse
-        SlashCourse slashCourse = slashCourseDAO.getByCRN(crn.get())
+        SlashCourse slashCourse = slashCourseDAO.getByCRN(crn)
 
         if (slashCourse == null) {
-            Integer errorCode     = Response.Status.NOT_FOUND.getStatusCode()
-            String errorMessage   = "Resource Not Found."
-            ErrorPOJO returnError = new ErrorPOJO(errorCode: errorCode, errorMessage: errorMessage)
-            returnResponse        = Response.status(Response.Status.NOT_FOUND).entity(returnError).build()
+            returnResponse = notFound()
         } else {
-            returnResponse = Response.ok(slashCourse).build()
+            returnResponse = ok(slashCourse).build()
         }
             returnResponse
     }
