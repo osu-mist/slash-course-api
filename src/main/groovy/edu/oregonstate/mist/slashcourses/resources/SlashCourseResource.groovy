@@ -1,7 +1,6 @@
 package edu.oregonstate.mist.slashcourses.resources
 
 import edu.oregonstate.mist.api.Resource
-import edu.oregonstate.mist.slashcourses.core.Instructor
 import edu.oregonstate.mist.slashcourses.core.SlashCourse
 import edu.oregonstate.mist.slashcourses.db.InstructorDAO
 import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
