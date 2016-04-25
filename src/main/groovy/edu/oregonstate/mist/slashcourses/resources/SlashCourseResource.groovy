@@ -1,7 +1,9 @@
 package edu.oregonstate.mist.slashcourses.resources
 
 import edu.oregonstate.mist.api.Resource
+import edu.oregonstate.mist.slashcourses.core.Instructor
 import edu.oregonstate.mist.slashcourses.core.SlashCourse
+import edu.oregonstate.mist.slashcourses.db.InstructorDAO
 import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
 
 import javax.ws.rs.GET
@@ -20,9 +22,11 @@ import javax.ws.rs.core.MediaType
 class SlashCourseResource extends Resource {
 
     private final SlashCourseDAO slashCourseDAO
+    private final InstructorDAO instructorDAO
 
-    public SlashCourseResource(SlashCourseDAO slashCourseDAO){
+    public SlashCourseResource(SlashCourseDAO slashCourseDAO, InstructorDAO instructorDAO){
         this.slashCourseDAO = slashCourseDAO
+        this.instructorDAO = instructorDAO
     }
 
     /**
@@ -38,6 +42,7 @@ class SlashCourseResource extends Resource {
     public Response getByCRN(@PathParam('crn') Integer crn) {
         Response returnResponse
         SlashCourse slashCourse = slashCourseDAO.getByCRN(crn)
+        slashCourse.instructor = instructorDAO.getByInstructorID(slashCourse.instructor_id)
 
         if (slashCourse == null) {
             returnResponse = notFound()

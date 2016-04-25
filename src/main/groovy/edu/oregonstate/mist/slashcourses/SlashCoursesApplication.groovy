@@ -2,7 +2,7 @@ package edu.oregonstate.mist.slashcourses
 
 import edu.oregonstate.mist.slashcourses.db.InstructorDAO
 import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
-import edu.oregonstate.mist.slashcourses.resources.InstructorResource
+
 import edu.oregonstate.mist.slashcourses.resources.SlashCourseResource
 import io.dropwizard.Application
 import io.dropwizard.jdbi.DBIFactory
@@ -36,8 +36,7 @@ class SlashCoursesApplication extends Application<SlashCoursesApplicationConfigu
         final SlashCourseDAO slashCourseDAO = jdbi.onDemand(SlashCourseDAO.class)
         final InstructorDAO instructorDAO = jdbi.onDemand(InstructorDAO.class)
 
-        environment.jersey().register(new SlashCourseResource(slashCourseDAO))
-        environment.jersey().register(new InstructorResource(instructorDAO))
+        environment.jersey().register(new SlashCourseResource(slashCourseDAO, instructorDAO))
     }
 
     /**
