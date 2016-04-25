@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response
 import javax.ws.rs.core.MediaType
 
 /**
- * Sample resource class.
+ * Slash Course Resource class.
  */
 @Path('/slash_courses/')
 @Produces(MediaType.APPLICATION_JSON)
