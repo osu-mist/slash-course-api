@@ -5,10 +5,10 @@ The RESTful API which allows users to view all slash courses. Users can also upd
 ## Description
 
 There are two resources in the Slash Course API: **/slash\_courses** and **/slash\_courses/{crn}**
-/slash_courses supports **GET** and **POST**.
+* /slash_courses supports **GET** and **POST**.
     * In GET /slash_course, users are allowed to query all slash courses information or to filter the results by giving parameters (by course name, term or department).
     * In POST /slash_course, users are allowed to add a new course resource. 
-/slash_courses/{crn} supports **GET**, **PUT** and **DELETE**
+* /slash_courses/{crn} supports **GET**, **PUT** and **DELETE**
     * In GET /slash_course/{crn}, users are allowed to query one specific slash course information by CRN.
     * In PUT /slash_course/{crn}, users are allowed to update a new course information by CRN.
     * In DELETE /slash_course/{crn}, users are allowed to delete a existed course object by CRN.
@@ -30,7 +30,7 @@ Retrieve the slash course info from the database
 Respond to GET requests and show course information according to course CRN.
 
 ```
-GET /api/v0/slash_course/58736
+> GET /api/v0/slash_course/58736
 
 {
   "crn": 58736,
