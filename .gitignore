@@ -18,3 +18,5 @@ configuration.yaml
 # Oracle Driver
 bin/ojdbc6_g.jar
 
+# Build Properties
+build.properties
