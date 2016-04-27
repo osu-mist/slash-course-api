@@ -15,7 +15,7 @@ public interface InstructorDAO {
     @SqlQuery("""
               SELECT *
               FROM INSTRUCTOR
-              WHERE INSTRUCTOR_ID = :instructor_id
+              WHERE INSTRUCTOR_ID = :instructorId
               """ )
-    Instructor getByInstructorID(@Bind("instructor_id") Integer instructor_id)
+    Instructor getByInstructorID(@Bind("instructorId") Integer instructorId)
 }

@@ -14,11 +14,11 @@ public class SlashCourseMapper implements ResultSetMapper<SlashCourse> {
     SlashCourse map(int index, ResultSet r, StatementContext ctx) throws SQLException {
         new SlashCourse(
                 crn:           r.getInt('CRN'),
-                course_num:    r.getString('COURSE_NUM'),
-                course_name:   r.getString('COURSE_NAME'),
+                courseNum:    r.getString('COURSE_NUM'),
+                courseName:   r.getString('COURSE_NAME'),
                 slash:         r.getInt('SLASH'),
                 term:          r.getString('TERM'),
-                instructor_id: r.getInt('INSTRUCTOR_ID'),
+                instructorId: r.getInt('INSTRUCTOR_ID'),
                 day:           r.getString('DAY'),
                 time:          r.getString('TIME'),
                 location:      r.getString('LOCATION'),
