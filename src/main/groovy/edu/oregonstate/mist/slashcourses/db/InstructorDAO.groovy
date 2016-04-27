@@ -10,7 +10,7 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper
  * Instructor DAO
  */
 @RegisterMapper(InstructorMapper)
-public interface InstructorDAO {
+public interface InstructorDAO extends Closeable{
 
     @SqlQuery("""
               SELECT *
@@ -18,4 +18,7 @@ public interface InstructorDAO {
               WHERE INSTRUCTOR_ID = :instructorId
               """ )
     Instructor getByInstructorID(@Bind("instructorId") Integer instructorId)
+
+    @Override
+    void close()
 }

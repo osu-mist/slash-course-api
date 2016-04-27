@@ -10,7 +10,7 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper
  * Slash Course DAO
  */
 @RegisterMapper(SlashCourseMapper)
-public interface SlashCourseDAO {
+public interface SlashCourseDAO extends Closeable {
 
     /** Get slash course by CRN
      *
@@ -23,4 +23,7 @@ public interface SlashCourseDAO {
               WHERE CRN = :crn
               """ )
     SlashCourse getByCRN(@Bind("crn") Integer crn)
+
+    @Override
+    void close()
 }
