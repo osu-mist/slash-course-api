@@ -33,8 +33,9 @@ class SlashCoursesApplication extends Application<SlashCoursesApplicationConfigu
 
         final DBIFactory factory = new DBIFactory()
         final DBI jdbi = factory.build(environment, configuration.getDatabase(), "jdbi")
+
         final SlashCourseDAO slashCourseDAO = jdbi.onDemand(SlashCourseDAO.class)
-        final InstructorDAO instructorDAO = jdbi.onDemand(InstructorDAO.class)
+        final InstructorDAO instructorDAO   = jdbi.onDemand(InstructorDAO.class)
 
         environment.jersey().register(new SlashCourseResource(slashCourseDAO, instructorDAO))
     }

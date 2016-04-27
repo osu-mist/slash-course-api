@@ -25,7 +25,7 @@ class SlashCourseResource extends Resource {
 
     public SlashCourseResource(SlashCourseDAO slashCourseDAO, InstructorDAO instructorDAO){
         this.slashCourseDAO = slashCourseDAO
-        this.instructorDAO = instructorDAO
+        this.instructorDAO  = instructorDAO
     }
 
     /**
@@ -41,7 +41,7 @@ class SlashCourseResource extends Resource {
     public Response getByCRN(@PathParam('crn') Integer crn) {
         Response returnResponse
         SlashCourse slashCourse = slashCourseDAO.getByCRN(crn)
-        slashCourse.instructor = instructorDAO.getByInstructorID(slashCourse.instructorId)
+        slashCourse.instructor  = instructorDAO.getByInstructorID(slashCourse.instructorId)
 
         if (slashCourse == null) {
             returnResponse = notFound()
