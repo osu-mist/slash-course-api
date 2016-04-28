@@ -41,11 +41,11 @@ class SlashCourseResource extends Resource {
     public Response getByCRN(@PathParam('crn') Integer crn) {
         Response returnResponse
         SlashCourse slashCourse = slashCourseDAO.getByCRN(crn)
-        slashCourse.instructor  = instructorDAO.getByInstructorID(slashCourse.instructorId)
 
         if (slashCourse == null) {
-            returnResponse = notFound()
+            returnResponse = notFound().build()
         } else {
+            slashCourse.instructor  = instructorDAO.getByInstructorID(slashCourse.instructorId)
             returnResponse = ok(slashCourse).build()
         }
             returnResponse
