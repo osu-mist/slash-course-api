@@ -2,31 +2,26 @@ package edu.oregonstate.mist.slashcourses.health
 
 import com.codahale.metrics.health.HealthCheck
 import com.codahale.metrics.health.HealthCheck.Result
+import edu.oregonstate.mist.slashcourses.db.InstructorDAO
+import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
 
 /**
  * Slash Course HealthCheck
  */
 class SlashCourseHealthCheck extends HealthCheck {
 
-    final Map<String, String> slashCourseConfiguration
+    private final SlashCourseDAO slashCourseDAO
+    private final InstructorDAO instructorDAO
 
-    SlashCourseHealthCheck(Map<String, String> slashCourseConfiguration) {
-        this.slashCourseConfiguration = slashCourseConfiguration
+    public SlashCourseHealthCheck(SlashCourseDAO slashCourseDAO, InstructorDAO instructorDAO) {
+        this.slashCourseDAO = slashCourseDAO
+        this.instructorDAO  = instructorDAO
     }
 
-    protected Result check() {
-        Result.unhealthy("default health check needs to be overwritten")
-    }
-
-    protected Result checkurl(String url){
+    @Override
+    protected Result check() throws Exception {
         try {
-            String urlText = new URL(url).text
-
-            if (urlText) {
-                Result.healthy()
-            } else {
-                Result.unhealthy("Content of url: (${url}) was empty or null")
-            }
+            return Result.healthy()
         } catch (Exception e) {
             Result.unhealthy(e.message)
         }
