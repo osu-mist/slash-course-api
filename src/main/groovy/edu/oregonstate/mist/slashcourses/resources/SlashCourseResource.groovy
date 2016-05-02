@@ -36,11 +36,9 @@ class SlashCourseResource extends Resource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<SlashCourse> getAll() {
-        List<SlashCourse> initSlashCourseList = slashCourseDAO.getAll()
-        List<SlashCourse> slashCourseList = []
-        for (slashCourse in initSlashCourseList) {
+        List<SlashCourse> slashCourseList = slashCourseDAO.getAll()
+        for (slashCourse in slashCourseList) {
             slashCourse.instructor  = instructorDAO.getByInstructorID(slashCourse.instructorId)
-            slashCourseList << slashCourse
         }
         slashCourseList
     }
