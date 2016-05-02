@@ -29,12 +29,22 @@ class SlashCourseResource extends Resource {
     }
 
     /**
+     * Respond to GET requests and show all courses information.
+     *
+     * @return founded course objects
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<SlashCourse> getAll() {
+        slashCourseDAO.getAll()
+    }
+
+    /**
      * Respond to GET requests and show course information according to course CRN.
      *
      * @param crn
      * @return founded course object or error message
      */
-
     @GET
     @Path('{crn: \\d+}')
     @Produces(MediaType.APPLICATION_JSON)

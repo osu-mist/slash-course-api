@@ -12,6 +12,17 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper
 @RegisterMapper(SlashCourseMapper)
 public interface SlashCourseDAO extends Closeable {
 
+    /** Get all slash courses
+     *
+     *  @return a list of Slash Course object
+     */
+    @SqlQuery("""
+              SELECT *
+              FROM COURSE
+              """)
+    List<SlashCourse> getAll()
+
+
     /** Get slash course by CRN
      *
      *  @param crn
