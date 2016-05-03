@@ -204,8 +204,8 @@ definitions:
         format: int32
       term:
         type: string
-      instructor:
-        type: string
+      instructor_id:
+        type: int32
       day:
         type: string
       time:
@@ -213,6 +213,17 @@ definitions:
       location:
         type: string
       type:
+        type: string
+
+  # Instructor object schema
+  InstructorObject:
+    properties:
+      instructor_id:
+        type: integer
+        format: int32
+      last_name:
+        type: string
+      first_name:
         type: string
             
   # A list of course objects
