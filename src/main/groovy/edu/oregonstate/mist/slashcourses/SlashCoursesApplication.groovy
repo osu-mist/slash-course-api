@@ -3,6 +3,7 @@ package edu.oregonstate.mist.slashcourses
 import edu.oregonstate.mist.slashcourses.db.InstructorDAO
 import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
 import edu.oregonstate.mist.api.Resource
+import edu.oregonstate.mist.slashcourses.health.InstructorHealthCheck
 import edu.oregonstate.mist.slashcourses.health.SlashCourseHealthCheck
 import edu.oregonstate.mist.slashcourses.resources.SlashCourseResource
 
@@ -44,6 +45,7 @@ class SlashCoursesApplication extends Application<SlashCoursesApplicationConfigu
 
         // Health Check
         environment.healthChecks().register("slash course", new SlashCourseHealthCheck(slashCourseDAO, instructorDAO))
+        environment.healthChecks().register("instructor",  new InstructorHealthCheck(instructorDAO))
     }
 
     /**
