@@ -23,11 +23,11 @@ By default, the API uses the port `8080`, so in order to test the API locally, y
 
 ## GET
 
-Retrieve the slash course info from the database
+Retrieve the slash course info from the database.
 
 #### GET all slash courses or by giving filters
 
-Respond to GET requests and filter the result based on filter parameter.
+Respond to GET requests and filter the result based on filter parameters.
 
 ```
 > GET /api/v0/slash_course
