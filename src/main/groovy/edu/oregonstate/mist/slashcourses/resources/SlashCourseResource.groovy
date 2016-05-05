@@ -39,10 +39,11 @@ class SlashCourseResource extends Resource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<SlashCourse> getAll (@QueryParam("course_num") Optional<String> courseNum,
                                      @QueryParam("term") Optional<String> term,
-                                     @QueryParam("department") Optional<String> department) {
+                                     @QueryParam("department") Optional<String> department,
+                                     @QueryParam("slash") Optional<Integer> slash) {
 
         // get all slash courses or filtered by parameters
-        List<SlashCourse> slashCourseList = slashCourseDAO.getCoursesMatch(courseNum.or(""), term.or(""), department.or(""))
+        List<SlashCourse> slashCourseList = slashCourseDAO.getCoursesMatch(courseNum.or(""), term.or(""), department.or(""), slash.or(1))
         for (slashCourse in slashCourseList) {
             slashCourse.instructor  = instructorDAO.getByInstructorID(slashCourse.instructorId)
         }

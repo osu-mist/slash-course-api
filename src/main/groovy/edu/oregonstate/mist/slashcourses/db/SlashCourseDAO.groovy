@@ -22,10 +22,12 @@ public interface SlashCourseDAO extends Closeable {
               WHERE COURSE_NUM LIKE '%' ||:courseNum|| '%'
               AND TERM LIKE '%' ||:term|| '%'
               AND COURSE_NUM LIKE '%' ||:department|| '%'
+              AND SLASH LIKE '%' ||:slash|| '%'
               """)
     List<SlashCourse> getCoursesMatch(@Bind("courseNum") String courseNum,
                                       @Bind("term") String term,
-                                      @Bind("department") String department
+                                      @Bind("department") String department,
+                                      @Bind("slash") Integer slash
                                       )
 
     /** Get slash course by CRN
