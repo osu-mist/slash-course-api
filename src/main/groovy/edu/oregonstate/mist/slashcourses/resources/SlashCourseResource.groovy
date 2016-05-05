@@ -1,5 +1,6 @@
 package edu.oregonstate.mist.slashcourses.resources
 
+import com.google.common.base.Optional
 import edu.oregonstate.mist.api.Resource
 import edu.oregonstate.mist.slashcourses.core.SlashCourse
 import edu.oregonstate.mist.slashcourses.db.InstructorDAO
@@ -10,6 +11,7 @@ import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
+import javax.ws.rs.QueryParam
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.MediaType
 
@@ -23,7 +25,7 @@ class SlashCourseResource extends Resource {
     private final SlashCourseDAO slashCourseDAO
     private final InstructorDAO instructorDAO
 
-    public SlashCourseResource(SlashCourseDAO slashCourseDAO, InstructorDAO instructorDAO){
+    public SlashCourseResource (SlashCourseDAO slashCourseDAO, InstructorDAO instructorDAO) {
         this.slashCourseDAO = slashCourseDAO
         this.instructorDAO  = instructorDAO
     }
@@ -35,11 +37,25 @@ class SlashCourseResource extends Resource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<SlashCourse> getAll() {
+    public List<SlashCourse> getAll(@QueryParam("course_num") Optional<String> courseNum,
+                                    @QueryParam("term") Optional<String> term,
+                                    @QueryParam("department") Optional<String> department,
+                                    @QueryParam("slash") Optional<Integer> slash) {
+
+        // get all slash courses from database
         List<SlashCourse> slashCourseList = slashCourseDAO.getAll()
         for (slashCourse in slashCourseList) {
             slashCourse.instructor  = instructorDAO.getByInstructorID(slashCourse.instructorId)
         }
+
+        // filter slash courses according to parameters
+        System.out.println("===================")
+        System.out.println("term: " + term)
+        System.out.println("courseNum: " + courseNum)
+        System.out.println("department: " + department)
+        System.out.println("slash: " + slash)
+        System.out.println("===================")
+
         slashCourseList
     }
 
