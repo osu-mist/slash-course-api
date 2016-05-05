@@ -6,8 +6,8 @@ import edu.oregonstate.mist.slashcourses.core.SlashCourse
 import edu.oregonstate.mist.slashcourses.db.InstructorDAO
 import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
 
+import javax.ws.rs.DELETE
 import javax.ws.rs.GET
-import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
@@ -74,16 +74,17 @@ class SlashCourseResource extends Resource {
     }
 
     /**
-     * Responds to POST requests by reading and returning a message.
+     * Respond to DELETE requests and removes a course object according to course CRN.
      *
-     * @param message
-     * @return message
+     * @param crn
+     * @return response containing the result or error message
      */
-//    @POST
-//    @Consumes(MediaType.TEXT_PLAIN)
-//    @Produces(MediaType.TEXT_PLAIN)
-//    public Response postMessage(String message, @Auth AuthenticatedUser authenticatedUser) {
-//        ResponseBuilder responseBuilder = ok(message)
-//        responseBuilder.build()
-//    }
+    @Path('{crn: \\d+}')
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteByCRN (@PathParam('crn') Integer crn) {
+        slashCourseDAO.deleteByCRN(crn)
+        Response.ok().build()
+    }
+
 }
