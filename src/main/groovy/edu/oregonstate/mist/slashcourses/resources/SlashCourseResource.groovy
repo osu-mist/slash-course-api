@@ -37,24 +37,15 @@ class SlashCourseResource extends Resource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<SlashCourse> getAll(@QueryParam("course_num") Optional<String> courseNum,
-                                    @QueryParam("term") Optional<String> term,
-                                    @QueryParam("department") Optional<String> department,
-                                    @QueryParam("slash") Optional<Integer> slash) {
+    public List<SlashCourse> getAll (@QueryParam("course_num") Optional<String> courseNum,
+                                     @QueryParam("term") Optional<String> term,
+                                     @QueryParam("department") Optional<String> department) {
 
-        // get all slash courses from database
-        List<SlashCourse> slashCourseList = slashCourseDAO.getAll()
+        // get all slash courses or filtered by parameters
+        List<SlashCourse> slashCourseList = slashCourseDAO.getCoursesMatch(courseNum.or(""), term.or(""), department.or(""))
         for (slashCourse in slashCourseList) {
             slashCourse.instructor  = instructorDAO.getByInstructorID(slashCourse.instructorId)
         }
-
-        // filter slash courses according to parameters
-        System.out.println("===================")
-        System.out.println("term: " + term)
-        System.out.println("courseNum: " + courseNum)
-        System.out.println("department: " + department)
-        System.out.println("slash: " + slash)
-        System.out.println("===================")
 
         slashCourseList
     }
@@ -68,7 +59,7 @@ class SlashCourseResource extends Resource {
     @GET
     @Path('{crn: \\d+}')
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getByCRN(@PathParam('crn') Integer crn) {
+    public Response getByCRN (@PathParam('crn') Integer crn) {
         Response returnResponse
         SlashCourse slashCourse = slashCourseDAO.getByCRN(crn)
 

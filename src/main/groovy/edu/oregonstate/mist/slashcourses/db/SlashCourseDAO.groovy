@@ -12,16 +12,21 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper
 @RegisterMapper(SlashCourseMapper)
 public interface SlashCourseDAO extends Closeable {
 
-    /** Get all slash courses
+    /** Get all slash courses by filter
      *
      *  @return a list of Slash Course object
      */
     @SqlQuery("""
               SELECT *
               FROM COURSE
+              WHERE COURSE_NUM LIKE '%' ||:courseNum|| '%'
+              AND TERM LIKE '%' ||:term|| '%'
+              AND COURSE_NUM LIKE '%' ||:department|| '%'
               """)
-    List<SlashCourse> getAll()
-
+    List<SlashCourse> getCoursesMatch(@Bind("courseNum") String courseNum,
+                                      @Bind("term") String term,
+                                      @Bind("department") String department
+                                      )
 
     /** Get slash course by CRN
      *
