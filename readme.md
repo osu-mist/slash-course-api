@@ -155,7 +155,7 @@ Respond to GET requests and filter the result based on filter parameters.
 
 #### GET by CRN
 
-Respond to GET requests and show course information according to course CRN.
+Respond to GET requests and show course information according to specific course CRN.
 
 ```
 > GET /api/v0/slash_course/58736
