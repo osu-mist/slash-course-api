@@ -176,4 +176,38 @@ Respond to GET requests and show course information according to specific course
   "location": "GLFN AUD",
   "type": "Lecture"
 }
+
+## DELETE
+
+Delete a course object from the database.
+
+#### DELETE by CRN
+
+Respond to DELETE requests and delete course object according to specific course CRN, or return not found message if the course crn is invalid.
+*If course CRN is valid: *
+
+```
+$ curl \ 
+> -X "DELETE" \
+> --insecure \ 
+> --key username.cer \
+> --user "username:password" \ 
+> --header "Content-Type: text/plain" \
+> https://localhost:8080/api/v0/slash_courses/58736
+
+DELETE /api/v0/slash_courses/58736 HTTP/1.1" 200
+```
+
+*If course CRN is invalid: *
+
+```
+$ curl \ 
+> -X "DELETE" \
+> --insecure \ 
+> --key username.cer \
+> --user "username:password" \ 
+> --header "Content-Type: text/plain" \
+> https://localhost:8080/api/v0/slash_courses/99999
+
+DELETE /api/v0/slash_courses/99999 HTTP/1.1" 404
 ```
