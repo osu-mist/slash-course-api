@@ -185,7 +185,8 @@ Delete a course object from the database.
 #### DELETE by CRN
 
 Respond to DELETE requests and delete course object according to specific course CRN, or return not found message if the course crn is invalid.
-*If course CRN is valid: *
+
+##### If course CRN is valid:
 
 ```
 $ curl \ 
@@ -199,7 +200,7 @@ $ curl \
 DELETE /api/v0/slash_courses/58736 HTTP/1.1" 200
 ```
 
-*If course CRN is invalid: *
+##### If course CRN is invalid: 
 
 ```
 $ curl \ 
