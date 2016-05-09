@@ -30,6 +30,11 @@ paths:
           description: "Search all slash courses by department"
           required: false
           type: string
+        - name: slash
+          in: query
+          description: "Search courses by slash or not. slash will be 1 by default."
+          required: false
+          type: int32
       responses:
         "200":
           description: "Successful response"
