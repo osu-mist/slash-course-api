@@ -49,10 +49,39 @@ public interface SlashCourseDAO extends Closeable {
      * @param crn
      */
     @SqlUpdate("""
-              DELETE FROM COURSE
-              WHERE CRN = :crn
-              """)
+               DELETE FROM COURSE
+               WHERE CRN = :crn
+               """)
     void deleteByCRN(@Bind("crn") Integer crn)
+
+    /**
+     * POST a course object
+     *
+     * @param crn
+     * @param courseNum
+     * @param courseName
+     * @param slash
+     * @param term
+     * @param instructorId
+     * @param day
+     * @param time
+     * @param location
+     * @param type
+     */
+    @SqlUpdate("""
+               INSERT INTO COURSE (CRN, COURSE_NUM, COURSE_NAME, SLASH, TERM, INSTRUCTOR_ID, DAY, TIME, LOCATION, TYPE)
+               VALUES (:crn, :courseNum, :courseName, :slash, :term, :instructorId, :day, :time, :location, :type)
+               """)
+    void postCourse(@Bind("crn") Integer crn,
+                    @Bind("courseNum") String courseNum,
+                    @Bind("courseName") String courseName,
+                    @Bind("slash") Integer slash,
+                    @Bind("term") String term,
+                    @Bind("instructorId") Integer instructorId,
+                    @Bind("day") String day,
+                    @Bind("time") String time,
+                    @Bind("location") String location,
+                    @Bind("type") String type)
 
     @Override
     void close()
