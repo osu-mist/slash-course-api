@@ -176,6 +176,7 @@ Respond to GET requests and show course information according to specific course
   "location": "GLFN AUD",
   "type": "Lecture"
 }
+```
 
 ## DELETE
 
