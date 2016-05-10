@@ -209,7 +209,7 @@ $ curl \
 > --key username.cer \
 > --user "username:password" \ 
 > --header "Content-Type: text/plain" \
-> https://localhost:8080/api/v0/slash_courses/99999
+> https://localhost:8080/api/v0/slash_courses/invalidCRN
 
-DELETE /api/v0/slash_courses/99999 HTTP/1.1" 404
+DELETE /api/v0/slash_courses/invalidCRN HTTP/1.1" 404
 ```
