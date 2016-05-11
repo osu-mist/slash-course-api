@@ -5,9 +5,13 @@ import edu.oregonstate.mist.api.Resource
 import edu.oregonstate.mist.slashcourses.core.SlashCourse
 import edu.oregonstate.mist.slashcourses.db.InstructorDAO
 import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
+import org.skife.jdbi.v2.exceptions.UnableToCloseResourceException
 
+import javax.validation.Valid
+import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
+import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
@@ -85,6 +89,44 @@ class SlashCourseResource extends Resource {
     public Response deleteByCRN (@PathParam('crn') Integer crn) {
         slashCourseDAO.deleteByCRN(crn)
         Response.ok().build()
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postCourse (@Valid SlashCourse newCourse) {
+
+        Response returnResponse
+        try {
+            slashCourseDAO.postCourse(newCourse.getCrn(),
+                                      newCourse.getCourseNum(),
+                                      newCourse.getCourseName(),
+                                      newCourse.getSlash(),
+                                      newCourse.getTerm(),
+                                      newCourse.getInstructorId(),
+                                      newCourse.getDay(),
+                                      newCourse.getTime(),
+                                      newCourse.getLocation(),
+                                      newCourse.getType())
+
+            URI createdURI = URI.create("/" + slashCourseDAO.getLatestCidNumber())
+            System.out.println("*** DEBUG " + createdURI.toString())
+
+            returnResponse = Response.created(createdURI).build()
+
+        } catch (UnableToCloseResourceException e) {
+            String constraintError = e.cause.toString()
+            System.out.println("*** DEBUG " + constraintError + "***")
+
+            if (constraintError.contains("COURSE_UK_CRN")) {
+                returnResponse = badRequest("CRN is not unique").build()
+            } else {
+                System.out.println(e.localizedMessage)
+                returnResponse = internalServerError("Internal server error").build()
+            }
+        }
+
+        returnResponse
     }
 
 }
