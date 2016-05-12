@@ -2,6 +2,7 @@ package edu.oregonstate.mist.slashcourses.resources
 
 import com.google.common.base.Optional
 import edu.oregonstate.mist.api.Resource
+import edu.oregonstate.mist.slashcourses.core.Instructor
 import edu.oregonstate.mist.slashcourses.core.SlashCourse
 import edu.oregonstate.mist.slashcourses.db.InstructorDAO
 import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
@@ -98,18 +99,39 @@ class SlashCourseResource extends Resource {
 
         Response returnResponse
         try {
-            slashCourseDAO.postCourse(newCourse.getCrn(),
-                                      newCourse.getCourseNum(),
-                                      newCourse.getCourseName(),
-                                      newCourse.getSlash(),
-                                      newCourse.getTerm(),
-                                      newCourse.getInstructorId(),
-                                      newCourse.getDay(),
-                                      newCourse.getTime(),
-                                      newCourse.getLocation(),
-                                      newCourse.getType())
 
-            returnResponse = Response.ok().build()
+            if (newCourse.getInstructor() != null) {
+                instructorDAO.postInstructor(newCourse.getInstructor().getLastName(),
+                                             newCourse.getInstructor().getFirstName())
+                slashCourseDAO.postCourse(newCourse.getCrn(),
+                                          newCourse.getCourseNum(),
+                                          newCourse.getCourseName(),
+                                          newCourse.getSlash(),
+                                          newCourse.getTerm(),
+                                          // retrieve the instructorId just created as instructorId in the new course object
+                                          instructorDAO.getLatestInstructorId().toInteger(),
+                                          newCourse.getDay(),
+                                          newCourse.getTime(),
+                                          newCourse.getLocation(),
+                                          newCourse.getType(),
+                                          newCourse.getInstructor())
+
+                URI createdURI = URI.create("/" + instructorDAO.getLatestInstructorId())
+                returnResponse = Response.created(createdURI).build()
+            } else {
+                slashCourseDAO.postCourse(newCourse.getCrn(),
+                                          newCourse.getCourseNum(),
+                                          newCourse.getCourseName(),
+                                          newCourse.getSlash(),
+                                          newCourse.getTerm(),
+                                          newCourse.getInstructorId(),
+                                          newCourse.getDay(),
+                                          newCourse.getTime(),
+                                          newCourse.getLocation(),
+                                          newCourse.getType(),
+                                          newCourse.getInstructor())
+                returnResponse = Response.ok().build()
+            }
 
         } catch (Exception e) {
             String constraintError = e.cause.toString()
@@ -118,7 +140,7 @@ class SlashCourseResource extends Resource {
             if (constraintError.contains("COURSE_PK")) {
                 returnResponse = badRequest("CRN is not unique").build()
             } else {
-                System.out.println(e.localizedMessage)
+                System.out.println("*** Localized Message " + e.localizedMessage + "***")
                 returnResponse = internalServerError("Internal server error").build()
             }
         }
