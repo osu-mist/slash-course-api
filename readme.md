@@ -176,6 +176,60 @@ Respond to GET requests and show course information according to specific course
   "location": "GLFN AUD",
   "type": "Lecture"
 }
+
+HTTP/1.1 200 OK
+Content-Length: 0
+Date: Thu, 12 May 2016 23:13:16 GMT
+```
+
+## POST
+
+Create new course object.
+
+##### Create course object with existing Instructor
+```
+POST /api/v0/slash_courses HTTP/1.1
+Content-Type: application/json
+
+{
+  "crn": 58771,
+  "courseNum": "CS519",
+  "courseName": "CS 519. (Section 005) ST/ COMPUTATIONAL GEOMETRY",
+  "slash": 0,
+  "term": "Sp16",
+  "instructorId": 5,
+  "day": "TR",
+  "time": "1400-1520",
+  "location": "WNGR 285 ",
+  "type": "Lecture"
+}
+```
+
+##### Create course object with new Instructor object
+```
+POST /api/v0/slash_courses HTTP/1.1
+Content-Type: application/json
+
+{
+  "crn": 33955,
+  "courseNum": "CS581",
+  "courseName": "CS 581. PROGRAMMING LANGUAGES",
+  "slash": 0,
+  "term": "Sp16",
+  "instructor": {
+      "lastName": "Erwig",
+      "firstName": "Martin"
+  },
+  "day": "TR",
+  "time": "1000-1120",
+  "location": "TBA",
+  "type": "Lecture"
+}
+
+HTTP/1.1 201 Created
+Content-Length: 0
+Date: Thu, 12 May 2016 23:08:42 GMT
+Location: https://localhost:8080/9
 ```
 
 ## DELETE
