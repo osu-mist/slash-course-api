@@ -13,7 +13,7 @@ class SlashCourse {
     String courseName
     Integer slash
     String term
-    @JsonIgnore Integer instructorId
+    Integer instructorId
     Instructor instructor
     String day
     String time
