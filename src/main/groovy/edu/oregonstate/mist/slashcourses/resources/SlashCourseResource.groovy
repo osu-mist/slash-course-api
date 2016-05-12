@@ -109,16 +109,13 @@ class SlashCourseResource extends Resource {
                                       newCourse.getLocation(),
                                       newCourse.getType())
 
-            URI createdURI = URI.create("/" + slashCourseDAO.getLatestCidNumber())
-            System.out.println("*** DEBUG " + createdURI.toString())
+            returnResponse = Response.ok().build()
 
-            returnResponse = Response.created(createdURI).build()
-
-        } catch (UnableToCloseResourceException e) {
+        } catch (Exception e) {
             String constraintError = e.cause.toString()
             System.out.println("*** DEBUG " + constraintError + "***")
 
-            if (constraintError.contains("COURSE_UK_CRN")) {
+            if (constraintError.contains("MISTSTU4.COURSE_PK")) {
                 returnResponse = badRequest("CRN is not unique").build()
             } else {
                 System.out.println(e.localizedMessage)

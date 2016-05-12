@@ -83,16 +83,6 @@ public interface SlashCourseDAO extends Closeable {
                     @Bind("location") String location,
                     @Bind("type") String type)
 
-    /**
-     * GET specific course object instance number using Oracle sequences
-     *
-     * @return Updated sequence number
-     */
-    @SqlUpdate("""
-               SELECT COURSE_SEQ.CURRVAL FROM DUAL
-               """)
-    Integer getLatestCidNumber()
-
     @Override
     void close()
 }
