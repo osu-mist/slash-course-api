@@ -4,6 +4,7 @@ import edu.oregonstate.mist.slashcourses.core.SlashCourse
 import edu.oregonstate.mist.slashcourses.mapper.SlashCourseMapper
 import org.skife.jdbi.v2.sqlobject.Bind
 import org.skife.jdbi.v2.sqlobject.SqlQuery
+import org.skife.jdbi.v2.sqlobject.SqlUpdate
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper
 
 /**
@@ -30,7 +31,7 @@ public interface SlashCourseDAO extends Closeable {
                                       @Bind("slash") Integer slash
                                       )
 
-    /** Get slash course by CRN
+    /** Get course object by CRN
      *
      *  @param crn
      *  @return Slash Course object
@@ -41,6 +42,17 @@ public interface SlashCourseDAO extends Closeable {
               WHERE CRN = :crn
               """ )
     SlashCourse getByCRN(@Bind("crn") Integer crn)
+
+    /**
+     * Delete a course object
+     *
+     * @param crn
+     */
+    @SqlUpdate("""
+              DELETE FROM COURSE
+              WHERE CRN = :crn
+              """)
+    void deleteByCRN(@Bind("crn") Integer crn)
 
     @Override
     void close()

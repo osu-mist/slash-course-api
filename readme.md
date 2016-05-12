@@ -32,6 +32,11 @@ Respond to GET requests and filter the result based on filter parameters.
 ```
 > GET /api/v0/slash_course
 
+HTTP/1.1 200 OK
+Content-Length: 438
+Content-Type: application/json
+Date: Wed, 11 May 2016 15:39:47 GMT
+
 [
   {
     "crn": 58736,
@@ -117,6 +122,11 @@ Respond to GET requests and filter the result based on filter parameters.
 
 > GET /api/v0/slash_courses?department=CS&slash=0
 
+HTTP/1.1 200 OK
+Content-Length: 291
+Content-Type: application/json
+Date: Wed, 11 May 2016 15:42:10 GMT
+
 [
   {
     "crn": 53901,
@@ -160,6 +170,11 @@ Respond to GET requests and show course information according to specific course
 ```
 > GET /api/v0/slash_course/58736
 
+HTTP/1.1 200 OK
+Content-Length: 243
+Content-Type: application/json
+Date: Wed, 11 May 2016 15:41:34 GMT
+
 {
   "crn": 58736,
   "courseNum": "CS544",
@@ -176,4 +191,32 @@ Respond to GET requests and show course information according to specific course
   "location": "GLFN AUD",
   "type": "Lecture"
 }
+```
+
+## DELETE
+
+Delete a course object from the database.
+
+#### DELETE by CRN
+
+Respond to DELETE requests and delete course object according to specific course CRN.
+
+##### If course CRN is valid:
+
+```
+> DELETE /api/v0/slash_courses/58736 HTTP/1.1
+
+HTTP/1.1 200 OK
+Content-Length: 0
+Date: Wed, 11 May 2016 15:33:51 GMT
+```
+
+##### If course CRN is invalid: 
+
+```
+> DELETE /api/v0/slash_courses/invalidCRN HTTP/1.1
+
+HTTP/1.1 404 Not Found
+Content-Length: 0
+Date: Wed, 11 May 2016 15:37:47 GMT
 ```
