@@ -1,5 +1,6 @@
 package edu.oregonstate.mist.slashcourses.db
 
+import edu.oregonstate.mist.slashcourses.core.Instructor
 import edu.oregonstate.mist.slashcourses.core.SlashCourse
 import edu.oregonstate.mist.slashcourses.mapper.SlashCourseMapper
 import org.skife.jdbi.v2.sqlobject.Bind
@@ -81,7 +82,8 @@ public interface SlashCourseDAO extends Closeable {
                     @Bind("day") String day,
                     @Bind("time") String time,
                     @Bind("location") String location,
-                    @Bind("type") String type)
+                    @Bind("type") String type,
+                    @Bind("instructor") Instructor instructor)
 
     @Override
     void close()
