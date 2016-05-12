@@ -85,6 +85,11 @@ public interface SlashCourseDAO extends Closeable {
                     @Bind("type") String type,
                     @Bind("instructor") Instructor instructor)
 
+    @SqlQuery("""
+              SELECT CRN FROM COURSE
+              """)
+    List<Integer> getAllCRN()
+
     @Override
     void close()
 }

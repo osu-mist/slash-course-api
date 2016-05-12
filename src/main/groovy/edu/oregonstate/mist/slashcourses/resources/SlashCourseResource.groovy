@@ -2,11 +2,9 @@ package edu.oregonstate.mist.slashcourses.resources
 
 import com.google.common.base.Optional
 import edu.oregonstate.mist.api.Resource
-import edu.oregonstate.mist.slashcourses.core.Instructor
 import edu.oregonstate.mist.slashcourses.core.SlashCourse
 import edu.oregonstate.mist.slashcourses.db.InstructorDAO
 import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
-import org.skife.jdbi.v2.exceptions.UnableToCloseResourceException
 
 import javax.validation.Valid
 import javax.ws.rs.Consumes
@@ -100,7 +98,9 @@ class SlashCourseResource extends Resource {
         Response returnResponse
         try {
 
-            if (newCourse.getInstructor() != null) {
+            List<Integer> crnList = slashCourseDAO.getAllCRN()
+
+            if (newCourse.getInstructor() != null && !crnList.contains(newCourse.getCrn())) {
                 instructorDAO.postInstructor(newCourse.getInstructor().getLastName(),
                                              newCourse.getInstructor().getFirstName())
                 slashCourseDAO.postCourse(newCourse.getCrn(),
