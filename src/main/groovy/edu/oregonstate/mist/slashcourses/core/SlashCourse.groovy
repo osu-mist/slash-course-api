@@ -1,8 +1,5 @@
 package edu.oregonstate.mist.slashcourses.core
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-
-
 /**
  * Slash Course Class
  */
