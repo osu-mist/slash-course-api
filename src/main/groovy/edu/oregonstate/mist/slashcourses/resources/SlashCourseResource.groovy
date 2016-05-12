@@ -115,7 +115,7 @@ class SlashCourseResource extends Resource {
             String constraintError = e.cause.toString()
             System.out.println("*** DEBUG " + constraintError + "***")
 
-            if (constraintError.contains("MISTSTU4.COURSE_PK")) {
+            if (constraintError.contains("COURSE_PK")) {
                 returnResponse = badRequest("CRN is not unique").build()
             } else {
                 System.out.println(e.localizedMessage)
