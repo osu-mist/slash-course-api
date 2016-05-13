@@ -43,6 +43,22 @@ public interface InstructorDAO extends Closeable{
               """)
     Integer getLatestInstructorId()
 
+    /**
+     * PUT a instructor object
+     *
+     * @param instructorId
+     * @param lastName
+     * @param firstName
+     */
+    @SqlUpdate("""
+               UPDATE INSTRUCTOR
+               SET LAST_NAME = :lastName, FIRST_NAME = :firstName
+               WHERE INSTRUCTOR_ID = :instructorId
+               """)
+    void putByInsructorId(@Bind("instructorId") Integer instructorId,
+                          @Bind("lastName") String lastName,
+                          @Bind("firstName") String firstName)
+
     @Override
     void close()
 }
