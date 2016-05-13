@@ -90,6 +90,38 @@ public interface SlashCourseDAO extends Closeable {
               """)
     List<Integer> getAllCRN()
 
+    /**
+     * PUT a course object
+     *
+     * @param crn
+     * @param courseNum
+     * @param courseName
+     * @param slash
+     * @param term
+     * @param instructorId
+     * @param day
+     * @param time
+     * @param location
+     * @param type
+     */
+    @SqlUpdate("""
+               UPDATE COURSE
+               SET COURSE_NUM = :courseNum, COURSE_NAME = :courseName, SLASH = :slash, TERM = :term,
+               INSTRUCTOR_ID = instructorId, DAY = :day, TIME = :time, LOCATION = :location, TYPE = :type
+               WHERE CRN = :crn
+               """)
+    void putByCRN(@Bind("crn") Integer crn,
+                  @Bind("courseNum") String courseNum,
+                  @Bind("courseName") String courseName,
+                  @Bind("slash") Integer slash,
+                  @Bind("term") String term,
+                  @Bind("instructorId") Integer instructorId,
+                  @Bind("day") String day,
+                  @Bind("time") String time,
+                  @Bind("location") String location,
+                  @Bind("type") String type,
+                  @Bind("instructor") Instructor instructor)
+
     @Override
     void close()
 }
