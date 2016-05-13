@@ -78,8 +78,8 @@ class SlashCourseResource extends Resource {
      * @param crn
      * @return response containing the result or error message
      */
-    @Path('{crn: \\d+}')
     @DELETE
+    @Path('{crn: \\d+}')
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteByCRN (@PathParam('crn') Integer crn) {
         slashCourseDAO.deleteByCRN(crn)
