@@ -126,11 +126,9 @@ class SlashCourseResource extends Resource {
             }
         } catch (Exception e) {
             String constraintError = e.cause.toString()
-            System.out.println("*** DEBUG " + constraintError + "***")
             if (constraintError.contains("COURSE_PK")) {
                 returnResponse = badRequest("CRN is not unique").build()
             } else {
-                System.out.println("*** Localized Message " + e.localizedMessage + "***")
                 returnResponse = internalServerError("Internal server error").build()
             }
         }
