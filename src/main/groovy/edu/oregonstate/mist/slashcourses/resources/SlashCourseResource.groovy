@@ -93,7 +93,7 @@ class SlashCourseResource extends Resource {
         Response returnResponse
         try {
             List<Integer> crnList = slashCourseDAO.getAllCRN()
-            if (newCourse.instructor != null && !crnList.contains(newCourse.crn)) {
+            if (newCourse.instructor && !crnList.contains(newCourse.crn)) {
                 instructorDAO.postInstructor(newCourse.instructor.lastName,
                                              newCourse.instructor.firstName)
                 slashCourseDAO.postCourse(newCourse.crn,
