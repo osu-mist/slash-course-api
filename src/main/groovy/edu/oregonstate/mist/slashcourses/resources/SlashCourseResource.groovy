@@ -93,35 +93,35 @@ class SlashCourseResource extends Resource {
         Response returnResponse
         try {
             List<Integer> crnList = slashCourseDAO.getAllCRN()
-            if (newCourse.getInstructor() != null && !crnList.contains(newCourse.getCrn())) {
-                instructorDAO.postInstructor(newCourse.getInstructor().getLastName(),
-                                             newCourse.getInstructor().getFirstName())
-                slashCourseDAO.postCourse(newCourse.getCrn(),
-                                          newCourse.getCourseNum(),
-                                          newCourse.getCourseName(),
-                                          newCourse.getSlash(),
-                                          newCourse.getTerm(),
+            if (newCourse.instructor != null && !crnList.contains(newCourse.crn)) {
+                instructorDAO.postInstructor(newCourse.instructor.lastName,
+                                             newCourse.instructor.firstName)
+                slashCourseDAO.postCourse(newCourse.crn,
+                                          newCourse.courseNum,
+                                          newCourse.courseName,
+                                          newCourse.slash,
+                                          newCourse.term,
                                           // retrieve the instructorId just created as instructorId in the new course object
                                           instructorDAO.getLatestInstructorId().toInteger(),
-                                          newCourse.getDay(),
-                                          newCourse.getTime(),
-                                          newCourse.getLocation(),
-                                          newCourse.getType(),
-                                          newCourse.getInstructor())
+                                          newCourse.day,
+                                          newCourse.time,
+                                          newCourse.location,
+                                          newCourse.type,
+                                          newCourse.instructor)
                 URI createdURI = URI.create("/" + instructorDAO.getLatestInstructorId())
                 returnResponse = Response.created(createdURI).build()
             } else {
-                slashCourseDAO.postCourse(newCourse.getCrn(),
-                                          newCourse.getCourseNum(),
-                                          newCourse.getCourseName(),
-                                          newCourse.getSlash(),
-                                          newCourse.getTerm(),
-                                          newCourse.getInstructorId(),
-                                          newCourse.getDay(),
-                                          newCourse.getTime(),
-                                          newCourse.getLocation(),
-                                          newCourse.getType(),
-                                          newCourse.getInstructor())
+                slashCourseDAO.postCourse(newCourse.crn,
+                                          newCourse.courseNum,
+                                          newCourse.courseName,
+                                          newCourse.slash,
+                                          newCourse.term,
+                                          newCourse.instructorId,
+                                          newCourse.day,
+                                          newCourse.time,
+                                          newCourse.location,
+                                          newCourse.type,
+                                          newCourse.instructor)
                 returnResponse = Response.ok().build()
             }
         } catch (Exception e) {
