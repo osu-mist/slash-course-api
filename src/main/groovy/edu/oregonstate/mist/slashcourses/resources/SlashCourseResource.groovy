@@ -86,6 +86,12 @@ class SlashCourseResource extends Resource {
         Response.ok().build()
     }
 
+    /**
+     * Respond to POST requests by creating a course object.
+     *
+     * @param newCourse
+     * @return response containing the result or error message
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
