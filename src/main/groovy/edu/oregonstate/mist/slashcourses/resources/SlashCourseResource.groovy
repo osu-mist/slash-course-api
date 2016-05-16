@@ -2,6 +2,7 @@ package edu.oregonstate.mist.slashcourses.resources
 
 import com.google.common.base.Optional
 import edu.oregonstate.mist.api.Resource
+import edu.oregonstate.mist.slashcourses.core.Instructor
 import edu.oregonstate.mist.slashcourses.core.SlashCourse
 import edu.oregonstate.mist.slashcourses.db.InstructorDAO
 import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
@@ -11,6 +12,7 @@ import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
 import javax.ws.rs.POST
+import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
@@ -137,6 +139,45 @@ class SlashCourseResource extends Resource {
             } else {
                 returnResponse = internalServerError("Internal server error").build()
             }
+        }
+        returnResponse
+    }
+
+    /**
+     * Respond to PUT requests by updating a course object according to course CRN.
+     * If the course object doesn't exist, create one with POST requests.
+     *
+     * @param crn
+     * @param newCourse
+     * @return response containing the result or error message
+     */
+    @PUT
+    @Path('{crn: \\d+}')
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response putByCRN (@PathParam('crn') Integer crn, SlashCourse newCourse) {
+        Response returnResponse
+        SlashCourse checkForCourseCRN = slashCourseDAO.getByCRN(crn)
+
+        // if the course object doesn't exist, call postCourse() to create one
+        if (!checkForCourseCRN) {
+            postCourse(newCourse)
+            URI createdURI = URI.create("/" + instructorDAO.getLatestInstructorId())
+            returnResponse = Response.created(createdURI).build()
+        } else {
+            String newCourseNum      = Optional.fromNullable(newCourse.courseNum).or(checkForCourseCRN.courseNum)
+            String newCourseName     = Optional.fromNullable(newCourse.courseName).or(checkForCourseCRN.courseName)
+            Integer newSlash         = Optional.fromNullable(newCourse.slash).or(checkForCourseCRN.slash)
+            String newTerm           = Optional.fromNullable(newCourse.term).or(checkForCourseCRN.term)
+            Integer newInstructorId  = Optional.fromNullable(newCourse.instructorId).or(checkForCourseCRN.instructorId)
+            String newDay            = Optional.fromNullable(newCourse.day).or(checkForCourseCRN.day)
+            String newTime           = Optional.fromNullable(newCourse.time).or(checkForCourseCRN.time)
+            String newLocation       = Optional.fromNullable(newCourse.location).or(checkForCourseCRN.location)
+            String newType           = Optional.fromNullable(newCourse.type).or(checkForCourseCRN.type)
+            Instructor newInstructor = Optional.fromNullable(newCourse.instructor).or(instructorDAO.getByInstructorID(newInstructorId))
+
+            slashCourseDAO.putByCRN(crn, newCourseNum, newCourseName, newSlash, newTerm, newInstructorId, newDay, newTime, newLocation, newType, newInstructor)
+            returnResponse = Response.ok().build()
         }
         returnResponse
     }
