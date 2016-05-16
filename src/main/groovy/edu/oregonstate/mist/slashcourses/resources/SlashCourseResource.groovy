@@ -6,8 +6,11 @@ import edu.oregonstate.mist.slashcourses.core.SlashCourse
 import edu.oregonstate.mist.slashcourses.db.InstructorDAO
 import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
 
+import javax.validation.Valid
+import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
+import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
@@ -21,7 +24,6 @@ import javax.ws.rs.core.MediaType
 @Path('/slash_courses/')
 @Produces(MediaType.APPLICATION_JSON)
 class SlashCourseResource extends Resource {
-
     private final SlashCourseDAO slashCourseDAO
     private final InstructorDAO instructorDAO
 
@@ -41,13 +43,11 @@ class SlashCourseResource extends Resource {
                                      @QueryParam("term") Optional<String> term,
                                      @QueryParam("department") Optional<String> department,
                                      @QueryParam("slash") Optional<Integer> slash) {
-
         // get all slash courses or filtered by parameters
         List<SlashCourse> slashCourseList = slashCourseDAO.getCoursesMatch(courseNum.or(""), term.or(""), department.or(""), slash.or(1))
         for (slashCourse in slashCourseList) {
             slashCourse.instructor  = instructorDAO.getByInstructorID(slashCourse.instructorId)
         }
-
         slashCourseList
     }
 
@@ -63,7 +63,6 @@ class SlashCourseResource extends Resource {
     public Response getByCRN (@PathParam('crn') Integer crn) {
         Response returnResponse
         SlashCourse slashCourse = slashCourseDAO.getByCRN(crn)
-
         if (slashCourse == null) {
             returnResponse = notFound().build()
         } else {
@@ -87,4 +86,52 @@ class SlashCourseResource extends Resource {
         Response.ok().build()
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postCourse (@Valid SlashCourse newCourse) {
+        Response returnResponse
+        try {
+            List<Integer> crnList = slashCourseDAO.getAllCRN()
+            if (newCourse.instructor && !crnList.contains(newCourse.crn)) {
+                instructorDAO.postInstructor(newCourse.instructor.lastName,
+                                             newCourse.instructor.firstName)
+                slashCourseDAO.postCourse(newCourse.crn,
+                                          newCourse.courseNum,
+                                          newCourse.courseName,
+                                          newCourse.slash,
+                                          newCourse.term,
+                                          // retrieve the instructorId just created as instructorId in the new course object
+                                          instructorDAO.getLatestInstructorId().toInteger(),
+                                          newCourse.day,
+                                          newCourse.time,
+                                          newCourse.location,
+                                          newCourse.type,
+                                          newCourse.instructor)
+                URI createdURI = URI.create("/" + instructorDAO.getLatestInstructorId())
+                returnResponse = Response.created(createdURI).build()
+            } else {
+                slashCourseDAO.postCourse(newCourse.crn,
+                                          newCourse.courseNum,
+                                          newCourse.courseName,
+                                          newCourse.slash,
+                                          newCourse.term,
+                                          newCourse.instructorId,
+                                          newCourse.day,
+                                          newCourse.time,
+                                          newCourse.location,
+                                          newCourse.type,
+                                          newCourse.instructor)
+                returnResponse = Response.ok().build()
+            }
+        } catch (Exception e) {
+            String constraintError = e.cause.toString()
+            if (constraintError.contains("COURSE_PK")) {
+                returnResponse = badRequest("CRN is not unique").build()
+            } else {
+                returnResponse = internalServerError("Internal server error").build()
+            }
+        }
+        returnResponse
+    }
 }

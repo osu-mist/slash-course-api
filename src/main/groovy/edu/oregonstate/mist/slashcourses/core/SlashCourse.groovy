@@ -1,8 +1,5 @@
 package edu.oregonstate.mist.slashcourses.core
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-
-
 /**
  * Slash Course Class
  */
@@ -13,7 +10,7 @@ class SlashCourse {
     String courseName
     Integer slash
     String term
-    @JsonIgnore Integer instructorId
+    Integer instructorId
     Instructor instructor
     String day
     String time
