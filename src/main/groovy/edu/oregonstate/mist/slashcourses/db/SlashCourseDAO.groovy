@@ -107,7 +107,7 @@ public interface SlashCourseDAO extends Closeable {
     @SqlUpdate("""
                UPDATE COURSE
                SET COURSE_NUM = :courseNum, COURSE_NAME = :courseName, SLASH = :slash, TERM = :term,
-               INSTRUCTOR_ID = instructorId, DAY = :day, TIME = :time, LOCATION = :location, TYPE = :type
+               INSTRUCTOR_ID = :instructorId, DAY = :day, TIME = :time, LOCATION = :location, TYPE = :type
                WHERE CRN = :crn
                """)
     void putByCRN(@Bind("crn") Integer crn,
