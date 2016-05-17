@@ -165,16 +165,22 @@ class SlashCourseResource extends Resource {
             URI createdURI = URI.create("/" + instructorDAO.getLatestInstructorId())
             returnResponse = Response.created(createdURI).build()
         } else {
-            String newCourseNum      = Optional.fromNullable(newCourse.courseNum).or(checkForCourseCRN.courseNum)
-            String newCourseName     = Optional.fromNullable(newCourse.courseName).or(checkForCourseCRN.courseName)
-            Integer newSlash         = Optional.fromNullable(newCourse.slash).or(checkForCourseCRN.slash)
-            String newTerm           = Optional.fromNullable(newCourse.term).or(checkForCourseCRN.term)
-            Integer newInstructorId  = Optional.fromNullable(newCourse.instructorId).or(checkForCourseCRN.instructorId)
-            String newDay            = Optional.fromNullable(newCourse.day).or(checkForCourseCRN.day)
-            String newTime           = Optional.fromNullable(newCourse.time).or(checkForCourseCRN.time)
-            String newLocation       = Optional.fromNullable(newCourse.location).or(checkForCourseCRN.location)
-            String newType           = Optional.fromNullable(newCourse.type).or(checkForCourseCRN.type)
-            Instructor newInstructor = Optional.fromNullable(newCourse.instructor).or(instructorDAO.getByInstructorID(newInstructorId))
+            String newCourseNum      = Optional.fromNullable(newCourse.courseNum).or(Optional.fromNullable(checkForCourseCRN.courseNum)).orNull()
+            String newCourseName     = Optional.fromNullable(newCourse.courseName).or(Optional.fromNullable(checkForCourseCRN.courseName)).orNull()
+            Integer newSlash         = Optional.fromNullable(newCourse.slash).or(Optional.fromNullable(checkForCourseCRN.slash)).orNull()
+            String newTerm           = Optional.fromNullable(newCourse.term).or(Optional.fromNullable(checkForCourseCRN.term)).orNull()
+            Integer newInstructorId  = Optional.fromNullable(newCourse.instructorId).or(Optional.fromNullable(checkForCourseCRN.instructorId)).orNull()
+            String newDay            = Optional.fromNullable(newCourse.day).or(Optional.fromNullable(checkForCourseCRN.day)).orNull()
+            String newTime           = Optional.fromNullable(newCourse.time).or(Optional.fromNullable(checkForCourseCRN.time)).orNull()
+            String newLocation       = Optional.fromNullable(newCourse.location).or(Optional.fromNullable(checkForCourseCRN.location)).orNull()
+            String newType           = Optional.fromNullable(newCourse.type).or(Optional.fromNullable(checkForCourseCRN.type)).orNull()
+            Instructor newInstructor = Optional.fromNullable(newCourse.instructor).or(Optional.fromNullable(checkForCourseCRN.instructor)).orNull()
+
+            // if newInstructor isn't null, create a new instructor object and retrieve its instructor id
+            if (newInstructor) {
+                instructorDAO.postInstructor(newInstructor.lastName, newInstructor.firstName)
+                newInstructorId = instructorDAO.getLatestInstructorId().toInteger()
+            }
 
             slashCourseDAO.putByCRN(crn, newCourseNum, newCourseName, newSlash, newTerm, newInstructorId, newDay, newTime, newLocation, newType, newInstructor)
             returnResponse = Response.ok().build()
