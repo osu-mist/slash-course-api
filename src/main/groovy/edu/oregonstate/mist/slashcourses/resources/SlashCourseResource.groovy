@@ -165,9 +165,11 @@ class SlashCourseResource extends Resource {
             URI createdURI = URI.create("/" + instructorDAO.getLatestInstructorId())
             returnResponse = Response.created(createdURI).build()
         } else {
-            String newCourseNum      = Optional.fromNullable(newCourse.courseNum).or(Optional.fromNullable(checkForCourseCRN.courseNum)).orNull()
-            String newCourseName     = Optional.fromNullable(newCourse.courseName).or(Optional.fromNullable(checkForCourseCRN.courseName)).orNull()
-            Integer newSlash         = Optional.fromNullable(newCourse.slash).or(Optional.fromNullable(checkForCourseCRN.slash)).orNull()
+            // courseNum, CourseName and slash must not be null
+            String newCourseNum      = Optional.fromNullable(newCourse.courseNum).or(checkForCourseCRN.courseNum)
+            String newCourseName     = Optional.fromNullable(newCourse.courseName).or(checkForCourseCRN.courseName)
+            Integer newSlash         = Optional.fromNullable(newCourse.slash).or(checkForCourseCRN.slash)
+            // term, instructorId, day, time, location, type, instructor is possible to be null
             String newTerm           = Optional.fromNullable(newCourse.term).or(Optional.fromNullable(checkForCourseCRN.term)).orNull()
             Integer newInstructorId  = Optional.fromNullable(newCourse.instructorId).or(Optional.fromNullable(checkForCourseCRN.instructorId)).orNull()
             String newDay            = Optional.fromNullable(newCourse.day).or(Optional.fromNullable(checkForCourseCRN.day)).orNull()
