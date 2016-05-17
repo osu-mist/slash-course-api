@@ -238,7 +238,7 @@ Create or update a course object.
 
 #### PUT by CRN
 
-##### If course CRN hasn't existed:
+##### If course hasn't existed:
 
 ```
 > PUT /api/v0/slash_courses/17915 HTTP/1.1
@@ -262,7 +262,7 @@ Date: Tue, 17 May 2016 17:29:41 GMT
 Location: https://localhost:8080/222
 ```
 
-##### If course CRN has existed:
+##### If course has existed:
 
 ```
 > PUT /api/v0/slash_courses/17915 HTTP/1.1
