@@ -155,7 +155,7 @@ class SlashCourseResource extends Resource {
     @Path('{crn: \\d+}')
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response putByCRN (@PathParam('crn') Integer crn, SlashCourse newCourse) {
+    public Response putByCRN (@PathParam('crn') Integer crn, @Valid SlashCourse newCourse) {
         Response returnResponse
         SlashCourse checkForCourseCRN = slashCourseDAO.getByCRN(crn)
 
