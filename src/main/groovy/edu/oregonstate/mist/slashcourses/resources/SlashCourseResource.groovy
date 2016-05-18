@@ -165,27 +165,32 @@ class SlashCourseResource extends Resource {
             URI createdURI = URI.create("/" + instructorDAO.getLatestInstructorId())
             returnResponse = Response.created(createdURI).build()
         } else {
-            // courseNum, CourseName and slash must not be null
-            String newCourseNum      = Optional.fromNullable(newCourse.courseNum).or(checkForCourseCRN.courseNum)
-            String newCourseName     = Optional.fromNullable(newCourse.courseName).or(checkForCourseCRN.courseName)
-            Integer newSlash         = Optional.fromNullable(newCourse.slash).or(checkForCourseCRN.slash)
-            // term, instructorId, day, time, location, type, instructor is possible to be null
-            String newTerm           = Optional.fromNullable(newCourse.term).or(Optional.fromNullable(checkForCourseCRN.term)).orNull()
-            Integer newInstructorId  = Optional.fromNullable(newCourse.instructorId).or(Optional.fromNullable(checkForCourseCRN.instructorId)).orNull()
-            String newDay            = Optional.fromNullable(newCourse.day).or(Optional.fromNullable(checkForCourseCRN.day)).orNull()
-            String newTime           = Optional.fromNullable(newCourse.time).or(Optional.fromNullable(checkForCourseCRN.time)).orNull()
-            String newLocation       = Optional.fromNullable(newCourse.location).or(Optional.fromNullable(checkForCourseCRN.location)).orNull()
-            String newType           = Optional.fromNullable(newCourse.type).or(Optional.fromNullable(checkForCourseCRN.type)).orNull()
-            Instructor newInstructor = Optional.fromNullable(newCourse.instructor).or(Optional.fromNullable(checkForCourseCRN.instructor)).orNull()
+            try {
+                // courseNum, CourseName and slash must not be null
+                String newCourseNum = Optional.fromNullable(newCourse.courseNum).or(checkForCourseCRN.courseNum)
+                String newCourseName = Optional.fromNullable(newCourse.courseName).or(checkForCourseCRN.courseName)
+                Integer newSlash = Optional.fromNullable(newCourse.slash).or(checkForCourseCRN.slash)
+                // term, instructorId, day, time, location, type, instructor is possible to be null
+                String newTerm = Optional.fromNullable(newCourse.term).or(Optional.fromNullable(checkForCourseCRN.term)).orNull()
+                Integer newInstructorId = Optional.fromNullable(newCourse.instructorId).or(Optional.fromNullable(checkForCourseCRN.instructorId)).orNull()
+                String newDay = Optional.fromNullable(newCourse.day).or(Optional.fromNullable(checkForCourseCRN.day)).orNull()
+                String newTime = Optional.fromNullable(newCourse.time).or(Optional.fromNullable(checkForCourseCRN.time)).orNull()
+                String newLocation = Optional.fromNullable(newCourse.location).or(Optional.fromNullable(checkForCourseCRN.location)).orNull()
+                String newType = Optional.fromNullable(newCourse.type).or(Optional.fromNullable(checkForCourseCRN.type)).orNull()
+                Instructor newInstructor = Optional.fromNullable(newCourse.instructor).or(Optional.fromNullable(checkForCourseCRN.instructor)).orNull()
 
-            // if newInstructor isn't null, create a new instructor object and retrieve its instructor id
-            if (newInstructor) {
-                instructorDAO.postInstructor(newInstructor.lastName, newInstructor.firstName)
-                newInstructorId = instructorDAO.getLatestInstructorId().toInteger()
+                // if newInstructor isn't null, create a new instructor object and retrieve its instructor id
+                if (newInstructor) {
+                    instructorDAO.postInstructor(newInstructor.lastName, newInstructor.firstName)
+                    newInstructorId = instructorDAO.getLatestInstructorId().toInteger()
+                }
+
+                slashCourseDAO.putByCRN(crn, newCourseNum, newCourseName, newSlash, newTerm, newInstructorId, newDay, newTime, newLocation, newType, newInstructor)
+                returnResponse = Response.ok().build()
+            } catch (Exception e) {
+                System.out.println("Catch exception: " + e.cause)
+                returnResponse = internalServerError("Internal server error").build()
             }
-
-            slashCourseDAO.putByCRN(crn, newCourseNum, newCourseName, newSlash, newTerm, newInstructorId, newDay, newTime, newLocation, newType, newInstructor)
-            returnResponse = Response.ok().build()
         }
         returnResponse
     }
