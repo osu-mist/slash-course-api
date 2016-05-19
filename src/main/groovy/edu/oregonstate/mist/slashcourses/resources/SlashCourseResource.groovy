@@ -2,6 +2,7 @@ package edu.oregonstate.mist.slashcourses.resources
 
 import com.google.common.base.Optional
 import edu.oregonstate.mist.api.Resource
+import edu.oregonstate.mist.slashcourses.core.Instructor
 import edu.oregonstate.mist.slashcourses.core.SlashCourse
 import edu.oregonstate.mist.slashcourses.db.InstructorDAO
 import edu.oregonstate.mist.slashcourses.db.SlashCourseDAO
@@ -11,6 +12,7 @@ import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
 import javax.ws.rs.POST
+import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
@@ -78,14 +80,20 @@ class SlashCourseResource extends Resource {
      * @param crn
      * @return response containing the result or error message
      */
-    @Path('{crn: \\d+}')
     @DELETE
+    @Path('{crn: \\d+}')
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteByCRN (@PathParam('crn') Integer crn) {
         slashCourseDAO.deleteByCRN(crn)
         Response.ok().build()
     }
 
+    /**
+     * Respond to POST requests by creating a course object.
+     *
+     * @param newCourse
+     * @return response containing the result or error message
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -133,5 +141,67 @@ class SlashCourseResource extends Resource {
             }
         }
         returnResponse
+    }
+
+    /**
+     * Respond to PUT requests by updating a course object according to course CRN.
+     * If the course object doesn't exist, create one with POST requests.
+     *
+     * @param crn
+     * @param newCourse
+     * @return response containing the result or error message
+     */
+    @PUT
+    @Path('{crn: \\d+}')
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response putByCRN (@PathParam('crn') Integer crn, @Valid SlashCourse newCourse) {
+        Response returnResponse
+        SlashCourse checkForCourseCRN = slashCourseDAO.getByCRN(crn)
+
+        // if the course object doesn't exist, call postCourse() to create one
+        if (!checkForCourseCRN) {
+            postCourse(newCourse)
+            URI createdURI = URI.create("/" + instructorDAO.getLatestInstructorId())
+            returnResponse = Response.created(createdURI).build()
+        } else {
+            try {
+                // courseNum, CourseName and slash must not be null
+                String newCourseNum      = getNewField(newCourse.courseNum, checkForCourseCRN.courseNum, false)
+                String newCourseName     = getNewField(newCourse.courseName, checkForCourseCRN.courseName, false)
+                Integer newSlash         = (Integer) getNewField(newCourse.slash, checkForCourseCRN.slash, false)
+                // term, instructorId, day, time, location, type, instructor is possible to be null
+                String newTerm           = getNewField(newCourse.term, checkForCourseCRN.term, true)
+                Integer newInstructorId  = (Integer) getNewField(newCourse.instructorId, checkForCourseCRN.instructorId, true)
+                String newDay            = getNewField(newCourse.day, checkForCourseCRN.day, true)
+                String newTime           = getNewField(newCourse.time, checkForCourseCRN.time, true)
+                String newLocation       = getNewField(newCourse.location, checkForCourseCRN.location, true)
+                String newType           = getNewField(newCourse.type, checkForCourseCRN.type, true)
+                Instructor newInstructor = (Instructor) getNewField(newCourse.instructor, checkForCourseCRN.instructor, true)
+
+                // if newInstructor isn't null, create a new instructor object and retrieve its instructor id
+                if (newInstructor) {
+                    instructorDAO.postInstructor(newInstructor.lastName, newInstructor.firstName)
+                    newInstructorId = instructorDAO.getLatestInstructorId().toInteger()
+                }
+                slashCourseDAO.putByCRN(crn, newCourseNum, newCourseName, newSlash, newTerm, newInstructorId, newDay, newTime, newLocation, newType, newInstructor)
+                returnResponse = Response.ok().build()
+            } catch (Exception e) {
+                System.out.println("Catch exception: " + e.cause)
+                returnResponse = internalServerError("Internal server error").build()
+            }
+        }
+        returnResponse
+    }
+
+    /**
+     * get new field for updating purpose
+     */
+    static public Object getNewField (Object newCourseField, Object checkForCourseCRNField, Boolean nullable) {
+        if (nullable) {
+            return Optional.fromNullable(newCourseField).or(Optional.fromNullable(checkForCourseCRNField)).orNull()
+        } else {
+            return Optional.fromNullable(newCourseField).or(checkForCourseCRNField)
+        }
     }
 }

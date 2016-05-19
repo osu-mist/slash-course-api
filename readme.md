@@ -247,6 +247,55 @@ Date: Thu, 12 May 2016 23:08:42 GMT
 Location: https://localhost:8080/9
 ```
 
+## PUT
+
+Create or update a course object.
+
+#### PUT by CRN
+
+##### If the course doesn't exist:
+
+```
+> PUT /api/v0/slash_courses/17915 HTTP/1.1
+Content-Type: application/json
+
+{
+  "crn": 17915,
+  "courseNum": "CS534",
+  "courseName": "CS 534. MACHINE LEARNING",
+  "slash": 1,
+  "instructor": {
+    "lastName": "Fern",
+    "firstName": "Xiaoli"
+  },
+  "day": "TR"
+}
+
+HTTP/1.1 201 Created
+Content-Length: 0
+Date: Tue, 17 May 2016 17:29:41 GMT
+Location: https://localhost:8080/222
+```
+
+##### If course was in the database:
+
+```
+> PUT /api/v0/slash_courses/17915 HTTP/1.1
+Content-Type: application/json
+
+{
+    "slash": 0,
+    "term": "F16",
+    "time": "1200-1320",
+    "location": "LINC 307",
+    "type": "Lecture"
+}
+
+HTTP/1.1 200 OK
+Content-Length: 0
+Date: Tue, 17 May 2016 17:38:12 GMT
+```
+
 ## DELETE
 
 Delete a course object from the database.
