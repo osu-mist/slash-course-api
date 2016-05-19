@@ -194,7 +194,9 @@ class SlashCourseResource extends Resource {
         returnResponse
     }
 
-    // get new field for updating purpose
+    /**
+     * get new field for updating purpose
+     */
     static public Object getNewField (Object newCourseField, Object checkForCourseCRNField, Boolean nullable) {
         if (nullable) {
             return Optional.fromNullable(newCourseField).or(Optional.fromNullable(checkForCourseCRNField)).orNull()
