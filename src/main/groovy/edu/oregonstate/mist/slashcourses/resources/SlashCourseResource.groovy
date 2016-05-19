@@ -167,17 +167,17 @@ class SlashCourseResource extends Resource {
         } else {
             try {
                 // courseNum, CourseName and slash must not be null
-                String newCourseNum      = Optional.fromNullable(newCourse.courseNum).or(checkForCourseCRN.courseNum)
-                String newCourseName     = Optional.fromNullable(newCourse.courseName).or(checkForCourseCRN.courseName)
-                Integer newSlash         = Optional.fromNullable(newCourse.slash).or(checkForCourseCRN.slash)
+                String newCourseNum      = getNewField(newCourse.courseNum, checkForCourseCRN.courseNum, false)
+                String newCourseName     = getNewField(newCourse.courseName, checkForCourseCRN.courseName, false)
+                Integer newSlash         = (Integer) getNewField(newCourse.slash, checkForCourseCRN.slash, false)
                 // term, instructorId, day, time, location, type, instructor is possible to be null
-                String newTerm           = Optional.fromNullable(newCourse.term).or(Optional.fromNullable(checkForCourseCRN.term)).orNull()
-                Integer newInstructorId  = Optional.fromNullable(newCourse.instructorId).or(Optional.fromNullable(checkForCourseCRN.instructorId)).orNull()
-                String newDay            = Optional.fromNullable(newCourse.day).or(Optional.fromNullable(checkForCourseCRN.day)).orNull()
-                String newTime           = Optional.fromNullable(newCourse.time).or(Optional.fromNullable(checkForCourseCRN.time)).orNull()
-                String newLocation       = Optional.fromNullable(newCourse.location).or(Optional.fromNullable(checkForCourseCRN.location)).orNull()
-                String newType           = Optional.fromNullable(newCourse.type).or(Optional.fromNullable(checkForCourseCRN.type)).orNull()
-                Instructor newInstructor = Optional.fromNullable(newCourse.instructor).or(Optional.fromNullable(checkForCourseCRN.instructor)).orNull()
+                String newTerm           = getNewField(newCourse.term, checkForCourseCRN.term, true)
+                Integer newInstructorId  = (Integer) getNewField(newCourse.instructorId, checkForCourseCRN.instructorId, true)
+                String newDay            = getNewField(newCourse.day, checkForCourseCRN.day, true)
+                String newTime           = getNewField(newCourse.time, checkForCourseCRN.time, true)
+                String newLocation       = getNewField(newCourse.location, checkForCourseCRN.location, true)
+                String newType           = getNewField(newCourse.type, checkForCourseCRN.type, true)
+                Instructor newInstructor = (Instructor) getNewField(newCourse.instructor, checkForCourseCRN.instructor, true)
 
                 // if newInstructor isn't null, create a new instructor object and retrieve its instructor id
                 if (newInstructor) {
@@ -193,5 +193,14 @@ class SlashCourseResource extends Resource {
             }
         }
         returnResponse
+    }
+
+    // get new field for updating purpose
+    static public Object getNewField (Object newCourseField, Object checkForCourseCRNField, Boolean nullable) {
+        if (nullable) {
+            return Optional.fromNullable(newCourseField).or(Optional.fromNullable(checkForCourseCRNField)).orNull()
+        } else {
+            return Optional.fromNullable(newCourseField).or(checkForCourseCRNField)
+        }
     }
 }
