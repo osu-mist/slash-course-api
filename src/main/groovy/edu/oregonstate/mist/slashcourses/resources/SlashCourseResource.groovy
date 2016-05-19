@@ -184,7 +184,6 @@ class SlashCourseResource extends Resource {
                     instructorDAO.postInstructor(newInstructor.lastName, newInstructor.firstName)
                     newInstructorId = instructorDAO.getLatestInstructorId().toInteger()
                 }
-
                 slashCourseDAO.putByCRN(crn, newCourseNum, newCourseName, newSlash, newTerm, newInstructorId, newDay, newTime, newLocation, newType, newInstructor)
                 returnResponse = Response.ok().build()
             } catch (Exception e) {
