@@ -2,7 +2,7 @@
 .gradle/
 
 # Dropwizard
-build/
+# build/
 logs/
 configuration.yaml
 
