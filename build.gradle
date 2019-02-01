@@ -25,9 +25,9 @@ buildscript {
 // https://docs.gradle.org/current/userguide/artifact_dependencies_tutorial.html#N10621
 repositories {
     mavenCentral()
-    // flatDir {
-    //     dirs 'bin'
-    // }
+    flatDir {
+         dirs 'bin'
+    }
 }
 
 // https://docs.gradle.org/current/userguide/artifact_dependencies_tutorial.html#N105E1
@@ -39,8 +39,8 @@ dependencies {
     compile "org.codehaus.groovy:groovy:${groovyVersion}"
     compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
     compile "io.dropwizard:dropwizard-auth:${dropwizardVersion}"
-    // compile "io.dropwizard:dropwizard-jdbi:${dropwizardVersion}"
-    // compile ':ojdbc6_g:'
+    compile "io.dropwizard:dropwizard-jdbi:${dropwizardVersion}"
+    compile ':ojdbc6_g:'
 }
 
 codenarc {

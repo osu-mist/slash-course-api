@@ -1,83 +1,262 @@
 swagger: '2.0'
+
 info:
-  title: Web API Skeleton
-  description: Skeleton for Dropwizard Web APIs
-  version: '0.0'
-  license:
-    name: GNU Affero General Public License Version 3
-    url: http://www.gnu.org/licenses/agpl-3.0.en.html
-externalDocs:
-  description: GitHub Repository
-  url: https://github.com/osu-mist/web-api-skeleton
-host: localhost
-schemes:
-  - http
-basePath: /api/v0
-consumes:
-  - text/plain
-produces:
-  - text/plain
+  version: "0.0.1"
+  title: Slash Course API
+
 paths:
-  /:
+  /slash_courses:
+    
+    # Get slash courses information 
     get:
-      summary: Get information
-      description: Build and runtime information about the application.
-      responses:
-        200:
-          description: Object containing information
-          schema:
-            $ref: '#/definitions/Info'
-  /sample:
-    get:
-      summary: Get message
-      description: This is a sample resource that returns a short message.
-      responses:
-        200:
-          description: A short message
-          schema:
-            type: string
-        404:
-          description: Not found
-          schema:
-            $ref: '#/definitions/Error'
-    post:
-      summary: Post message
-      description: This is a sample resource that returns the message it receives.
+      tags: 
+        - slash_course
+      description: "Get all slash courses information or filter by giving parameter"
+      produces:
+        - application/json
       parameters:
-        - name: message
-          in: body
-          schema:
-            type: string
-          required: true
+        - name: course_num # course_num is not unique for courses
+          in: query
+          description: "Search all slash courses by course number"
+          required: false
+          type: string
+        - name: term
+          in: query
+          description: "Search all slash courses by term"
+          required: false
+          type: string
+        - name: department
+          in: query
+          description: "Search all slash courses by department"
+          required: false
+          type: string
+        - name: slash
+          in: query
+          description: "Search courses by slash or not. slash will be 1 by default."
+          required: false
+          type: int32
       responses:
-        200:
-          description: The message received
+        "200":
+          description: "Successful response"
           schema:
-            type: string
-        404:
-          description: Not found
+            $ref: "#/definitions/CourseObjects"
+        "404":
+          description: "Not Found"
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Internal server errors"
+          schema:
+            $ref: "#/definitions/Errors"
+
+    # Add new slash course
+    post:
+      tags:
+        - slash_course
+      description: "Add a new slash course"
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: "Slash course information which will be added"
+          required: true
+          schema:
+            $ref: "#/definitions/CourseObject"
+      responses:
+        "201":
+          description: "Resource created"
+          schema:
+            $ref: "#/definitions/CourseObject"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        "405":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Internal server errors"
+          schema:
+            $ref: "#/definitions/Errors"
+
+  /slash_courses/{crn}:
+    
+    # Get slash course information 
+    get:
+      tags:
+        - slash_course
+      description: "Search one slash course by CRN"
+      operationId: getByCRN
+      produces:
+        - application/json
+      parameters:
+        - name: crn
+          in: path
+          description: "Unique CRN for searching purpose"
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/CourseObject"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Internal server errors"
+          schema:
+            $ref: "#/definitions/Errors"
+
+    # Update slash course information 
+    put:
+      tags:
+        - slash_course
+      description: "Update one slash course details by CRN"
+      produces:
+        - application/json
+      parameters:
+        - name: crn
+          in: path
+          description: "Unique CRN for searching purpose"
+          required: true
+          type: integer
+          format: int32
+        - name: body
+          in: body
+          description: "Slash course information which will be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/CourseObject"
+      responses:
+        "200":
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/CourseObject"
+        "201":
+          description: "Resource created"
+          schema:
+            $ref: "#/definitions/CourseObject"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        "404":
+          description: "Not found"
+          schema:
+            $ref: "#/definitions/Error"
+        "405":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Internal server error"
+          schema:
+            $ref: "#/definitions/Errors"
+
+    # Delete slash course information 
+    delete:
+      tags:
+        - slash_course
+      description: "Delete one slash course by CRN"
+      produces:
+        - application/json
+      parameters:
+        - name: crn
+          in: path
+          description: "Unique CRN for searching purpose"
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: "Successful response"
+        "204":
+          description: "No content"
+          schema:
+            $ref: "#/definitions/Error"    
+        "400":
+          description: "Invalid value"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Internal server errors"
+          schema:
+            $ref: "#/definitions/Errors"
+          
 definitions:
-  Info:
+            
+  # Course object schema
+  CourseObject:
     properties:
-      name:
+      crn:
+        type: integer
+        format: int32
+      course_num:
+        type: string
+      course_name:
+        type: string
+      slash:
+        type: integer
+        format: int32
+      term:
+        type: string
+      instructor_id:
+        type: int32
+      day:
         type: string
       time:
+        type: string
+      location:
+        type: string
+      type:
+        type: string
+
+  # Instructor object schema
+  InstructorObject:
+    properties:
+      instructor_id:
         type: integer
-      commit:
+        format: int32
+      last_name:
         type: string
-      documentation:
+      first_name:
         type: string
+            
+  # A list of course objects
+  CourseObjects:
+    title: ArrayOfCourseObject
+    type: array
+    items:
+      $ref: "#/definitions/CourseObject"
+            
+  # Error object schema
   Error:
+    type: object
     properties:
       status:
         type: integer
+        format: int32
       developerMessage:
         type: string
-      userMesage:
+      userMessafe:
         type: string
       code:
         type: integer
       details:
         type: string
+   
+  # A list of error objects
+  Errors:
+    title: ArrayOfErrors
+    type: array
+    items:
+      $ref: "#/definitions/Error"
