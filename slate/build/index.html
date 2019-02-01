@@ -1,0 +1,399 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Slash Course API Reference</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+.highlight .err {
+  color: #272822;
+  background-color: #f92672;
+}
+.highlight .c, .highlight .cd, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #f4bf75;
+}
+.highlight .nt {
+  color: #f4bf75;
+}
+.highlight .o, .highlight .ow {
+  color: #f8f8f2;
+}
+.highlight .p, .highlight .pi {
+  color: #f8f8f2;
+}
+.highlight .gi {
+  color: #a6e22e;
+}
+.highlight .gd {
+  color: #f92672;
+}
+.highlight .gh {
+  color: #66d9ef;
+  background-color: #272822;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #ae81ff;
+}
+.highlight .kc {
+  color: #fd971f;
+}
+.highlight .kt {
+  color: #fd971f;
+}
+.highlight .kd {
+  color: #fd971f;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #a6e22e;
+}
+.highlight .sr {
+  color: #a1efe4;
+}
+.highlight .si {
+  color: #cc6633;
+}
+.highlight .se {
+  color: #cc6633;
+}
+.highlight .nn {
+  color: #f4bf75;
+}
+.highlight .nc {
+  color: #f4bf75;
+}
+.highlight .no {
+  color: #f4bf75;
+}
+.highlight .na {
+  color: #66d9ef;
+}
+.highlight .m, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mb, .highlight .mx {
+  color: #a6e22e;
+}
+.highlight .ss {
+  color: #a6e22e;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;shell&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" alt="Logo" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='https://developer.oregonstate.edu/'>Register for an API token</a></li>
+            <li><a href='https://github.com/osu-mist/slash-course-api/tree/develop'>GitHub repository</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id="introduction">Introduction</h1>
+
+<p>This is a RESTful API which allows users to view all OSU slash courses. Users can also update or delete slash course data from the database. You can check the original GitHub repo <a href="https://github.com/osu-mist/slash-course-api/tree/develop">here</a>.</p>
+
+<h1 id="description">Description</h1>
+
+<p>There are two resources in the Slash Course API: <strong>/slash_courses and /slash_courses/{crn}</strong></p>
+
+<ul>
+<li>/slash_courses supports <strong>GET</strong> and <strong>POST</strong>.
+
+<ul>
+<li>In GET /slash_course, users are allowed to query all slash courses information or to filter the results by giving parameters (by course name, term or department).</li>
+<li>In POST /slash_course, users are allowed to add a new course resource.</li>
+</ul></li>
+<li>/slash_courses/{crn} supports <strong>GET</strong>, <strong>PUT</strong> and <strong>DELETE</strong>
+
+<ul>
+<li>In GET /slash_course/{crn}, users are allowed to query one specific slash course information by CRN.</li>
+<li>In PUT /slash_course/{crn}, users are allowed to update a new course information by CRN.</li>
+<li>In DELETE /slash_course/{crn}, users are allowed to delete a existed course object by CRN.</li>
+</ul></li>
+</ul>
+
+<h1 id="installation">Installation</h1>
+
+<p>You&rsquo;ll need to use Gradle to build the API and obtain the <code class="prettyprint">ojdbc6_g.jar</code> file from Oracle and put it into the <code class="prettyprint">bin</code> directory. In addition, you&rsquo;ll also have to create a <code class="prettyprint">configuration.yaml</code> file which includes your personal credentials. After finish the process, you can simply run the follow command to activate the API service: <code class="prettyprint">gradle run</code></p>
+<pre class="highlight shell"><code>gradle run
+</code></pre>
+<p>By default, the API uses the port <code class="prettyprint">8080</code>, so in order to test the API locally, you can access <code class="prettyprint">https://localhost:8080</code> from your browser.</p>
+
+<h1 id="slash-courses">Slash Courses</h1>
+
+<h2 id="get-all-slash-courses-or-by-giving-filters">GET all slash courses or by giving filters</h2>
+<pre class="highlight shell"><code>curl <span class="s2">"https://localhost:8080/api/v0/slash_course"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"crn"</span><span class="p">:</span><span class="w"> </span><span class="mi">58736</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseNum"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS544"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS 544. OPERATING SYSTEMS II"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"slash"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"term"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sp16"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"instructor"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"instructorId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"McGrath"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Kevin"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"day"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TR"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0830-0950"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GLFN AUD"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lecture"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"crn"</span><span class="p">:</span><span class="w"> </span><span class="mi">32432</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseNum"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ST511"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ST 511. METHODS OF DATA ANALYSIS"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"slash"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"term"</span><span class="p">:</span><span class="w"> </span><span class="s2">"W16"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"instructor"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"instructorId"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Emerson"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sarah"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"day"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MWF"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0800-0850"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MCC 201"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lecture"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"crn"</span><span class="p">:</span><span class="w"> </span><span class="mi">55504</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseNum"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS572"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS 572. COMPUTER ARCHITECTURE"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"slash"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"term"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sp16"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"instructor"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"instructorId"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Chen"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lizhong"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"day"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MWF"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1100-1150"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GLFN AUD"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lecture"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"crn"</span><span class="p">:</span><span class="w"> </span><span class="mi">16695</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseNum"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS572"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS 572. COMPUTER ARCHITECTURE"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"slash"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"term"</span><span class="p">:</span><span class="w"> </span><span class="s2">"F16"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"instructor"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"instructorId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"McGrath"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Kevin"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"day"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TR"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1400-1520"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"KIDD 364"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lecture"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"crn"</span><span class="p">:</span><span class="w"> </span><span class="mi">13067</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseNum"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS550"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS 550. INTRODUCTION TO COMPUTER GRAPHICS"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"slash"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"term"</span><span class="p">:</span><span class="w"> </span><span class="s2">"F16"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"instructor"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"instructorId"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bailey"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mike"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"day"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MWF"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1300-1350"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WNGR 116"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lecture"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre><pre class="highlight shell"><code>curl <span class="s2">"https://localhost:8080/api/v0/slash_courses?department=CS&amp;slash=0"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"crn"</span><span class="p">:</span><span class="w"> </span><span class="mi">53901</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseNum"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS569"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS 569. SELECTED TOPICS IN SOFTWARE ENGINEERING"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"slash"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"term"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sp16"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"instructor"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"instructorId"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Groce"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Alex"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"day"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MWF"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1500-1550"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BAT 150"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lecture"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"crn"</span><span class="p">:</span><span class="w"> </span><span class="mi">10459</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseNum"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS515"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"courseName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS 515. ALGORITHMS AND DATA STRUCTURES"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"slash"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"term"</span><span class="p">:</span><span class="w"> </span><span class="s2">"F16"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"instructor"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"instructorId"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Amir"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nayyeri"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"day"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MW"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1000-1150"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"KEAR 212"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lecture"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves all slash courses.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">GET https://localhost:8080/api/v0/slash_course</code></p>
+
+<h3 id="query-parameters">Query Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>department</td>
+<td>all</td>
+<td>If set to specific department (e.g. CS), the result will only include that department courses.</td>
+</tr>
+<tr>
+<td>slash</td>
+<td>1</td>
+<td>If set to 0, the result will only include non-slash courses.</td>
+</tr>
+</tbody></table>
+
+<h2 id="get-a-slash-course">Get a Slash Course</h2>
+<pre class="highlight shell"><code>curl <span class="s2">"https://localhost:8080/api/v0/slash_course/58736"</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+  </span><span class="nt">"crn"</span><span class="p">:</span><span class="w"> </span><span class="mi">58736</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"courseNum"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS544"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"courseName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CS 544. OPERATING SYSTEMS II"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"slash"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"term"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sp16"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"instructor"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"instructorId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"McGrath"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Kevin"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"day"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TR"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0830-0950"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GLFN AUD"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lecture"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves a specific slash course.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">GET https://localhost:8080/api/v0/slash_course/{crn}</code></p>
+
+<h3 id="url-parameters">URL Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>CRN</td>
+<td>The CRN of the slash course to retrieve</td>
+</tr>
+</tbody></table>
+
+          <h1 id="http-status-code">HTTP Status Code</h1>
+
+<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files&hellip;just save them to the `includes` folder and add them to the top of your `index.md`&rsquo;s frontmatter. Files are included in the order listed.</aside>
+
+<p>The Slash Course API uses the following HTTP status codes:</p>
+
+<table><thead>
+<tr>
+<th>HTTP Status Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td>Successful response</td>
+</tr>
+<tr>
+<td>201</td>
+<td>Resource created</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found</td>
+</tr>
+<tr>
+<td>405</td>
+<td>Invalid input</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
